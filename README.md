@@ -3,6 +3,8 @@ First attempt at a Vagrant script to perform a fully unattended installation of 
 
 This Vagrantfile gives an Oracle WebCenter 11.1.1.8.0 patch 10 single server development installation with cas and AviSports sample site. It uses tomcat 7 and hsqldb 1.8, on centos 6.6. This uses  a virtualbox provider, and shell provisioner script to do the installation work.
 
+*This is not an official Oracle product, and the stack is not supported (centos, hsqldb).*
+
 ### Usage:
 
 1. Install vagrant
@@ -28,6 +30,7 @@ This Vagrantfile gives an Oracle WebCenter 11.1.1.8.0 patch 10 single server dev
 
 
 * smarter install, dont run twice but instead wait for tomcat startup then continue
+* more configurable
 * install supporttools
 * enable asset forms in admin UI
 * echo script to run as root in host, to add ip address for v6 to /etc/hosts
@@ -36,3 +39,4 @@ This Vagrantfile gives an Oracle WebCenter 11.1.1.8.0 patch 10 single server dev
 * puppetize it all: os / tomcat / sites / patch
 * further puppetizing: httpd / vanity url config
 * further platform: oel / wls / oraclexe db
+* leave behind scripts for easy cmd line catalogmover & csdt
