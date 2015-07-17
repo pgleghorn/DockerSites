@@ -10,9 +10,13 @@ Usage:
 3. Obtain the following, and put in the kits directory
 
 jdk-7u79-linux-x64.tar.gz
+
 apache-tomcat-7.0.62.tar.gz
+
 hsqldb_1_8_0_10.zip
+
 V38958-01.zip (webcenter sites 11.1.1.8.0 kit from oracle edelivery)
+
 p20981509_111180_Generic.zip (webcenter sites 11.1.1.8.0 patch 10 kit from oracle support)
 
 4. Create a directory to store the vagrantfile, eg /home/phil/vagrant/v6
