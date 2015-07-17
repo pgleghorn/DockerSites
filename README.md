@@ -39,4 +39,5 @@ This Vagrantfile gives an Oracle WebCenter 11.1.1.8.0 patch 10 single server dev
 * puppetize it all: os / tomcat / sites / patch
 * further puppetizing: httpd / vanity url config
 * further platform: oel / wls / oraclexe db
-* leave behind scripts for easy cmd line catalogmover & csdt
+* leave behind scripts for easy cmd line catalogmover & csdt#
+* ssl
