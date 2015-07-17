@@ -225,18 +225,6 @@ ENDSILENTCONFIG
   sed -i 's/cs.timeout=.*/cs.timeout=18000/' /home/phil/oracle/webcenter/sites/futuretense.ini
 
 
-  # other TODO
-  # smarter install, dont run twice but instead wait for tomcat startup then continue
-  # install supporttools
-  # enable asset forms in admin UI
-  # echo script to run as root in host, to add ip address for v6 to /etc/hosts
-  # rss
-  # httpd
-  # puppetize it all: os / tomcat / sites / patch
-  # further puppetizing: httpd / vanity url config
-  # further platform: oel / wls / oraclexe
-
-
   # finished
   cat /etc/hosts
   ps -fu phil
