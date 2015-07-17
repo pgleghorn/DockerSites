@@ -120,13 +120,19 @@ ENDSILENTCONFIG
   
   # run sites install, first to build the war
   sudo -i -u phil sh -c "cd /home/phil/cs-tmp/Sites; echo | ./csInstall.sh -silent"
+  echo 
+  echo "*** "
+  echo "*** NOTE"
+  echo "*** Ignore the above failure, it is expected."
+  echo "*** Tomcat will now restart and the installer will run again"
+  echo "*** "
   # fix esapi loading
   mkdir /home/phil/esapi
   cp /home/phil/oracle/webcenter/sites/bin/ESAPI.properties /home/phil/esapi
   cp /home/phil/oracle/webcenter/sites/bin/validation.properties /home/phil/esapi
   # startup tomcat
   sudo -i -u phil startup.sh
-  echo "waiting for tomcat to start..."
+  echo "waiting 2 minutes for tomcat to start..."
   sleep 120
   tail -1000 /home/phil/tomcat/logs/catalina.out
   
@@ -230,6 +236,6 @@ ENDSILENTCONFIG
   ps -fu phil
   ifconfig -a
   df -h
-  echo "Now goto http://$ipaddr:8080/cs/"
+  echo "Now goto http://v6:8080/cs/"
 SHELL
 end
