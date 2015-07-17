@@ -21,15 +21,16 @@ This Vagrantfile gives an Oracle WebCenter Sites 11.1.1.8.0 patch 10 single serv
   * config.vm.synced_folder "/home/phil/Documents/kits", "/kits"
 5. Run "vagrant up", it takes about 10 minutes to install everything.
 6. Network is bridged, and presumes existence of "wlan2", if that does not exist then vagrant will prompt to ask which adapter it should use.
-7. When complete you should see "Now goto http://n.n.n.n:8080/cs/"
+7. When complete you should see "Now goto http://v6:8080/cs/"
 8. To access the box by hostname (v6)
-  * add an /etc/hosts (or windows equivalent), eg "n.n.n.n v6" where n.n.n.n is the address given after the environment is created
+  * add an /etc/hosts (or windows equivalent), eg "n.n.n.n v6" where n.n.n.n is the address you see in the ifconfig output at the end of the install
   * now you should be able to access it like http://v6:8080/cs/
 
 ### Todo
 
 
 * smarter install, dont run twice but instead wait for tomcat startup then continue
+* dont presume 192.168.x.x network
 * more configurable (user, directory, port, hostname, etc)
 * install supporttools
 * enable asset forms in admin UI
