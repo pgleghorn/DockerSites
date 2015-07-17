@@ -1,5 +1,5 @@
 # VagrantSites
-First attempt at a Vagrant script to perform a fully unattended installation of Oracle WebCenter Sites including OS, application server, DB, Sites and patches.
+Vagrant script to perform a fully unattended installation of Oracle WebCenter Sites including OS, application server, DB, Sites and patches.
 
 This Vagrantfile gives an Oracle WebCenter Sites 11.1.1.8.0 patch 10 single server development installation with cas and AviSports sample site. It uses tomcat 7 and hsqldb 1.8, on centos 6.6. This uses  a virtualbox provider, and shell provisioner script to do the installation work.
 
