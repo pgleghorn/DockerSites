@@ -29,12 +29,12 @@ This Vagrantfile gives an Oracle WebCenter Sites 11.1.1.8.0 patch 10 single serv
 ### Todo
 
 
-* smarter install, dont run twice but instead wait for tomcat startup then continue
+* ~~smarter install, dont run twice but instead wait for tomcat startup then continue~~
 * dont presume 192.168.x.x network
 * more configurable (user, directory, port, hostname, etc)
 * install supporttools
 * enable asset forms in admin UI
-* echo script to run as root in host, to add ip address for v6 to /etc/hosts
+* ~~echo script to run as root in host, to add ip address for v6 to /etc/hosts~~
 * rss
 * httpd / ohs
 * puppetize it all: os / tomcat / sites / patch
