@@ -3,35 +3,42 @@
 
 Vagrant.configure(2) do |config|
   config.vm.box = "puppetlabs/centos-6.6-64-puppet"
+  config.vm.box_check_update = false
   config.vm.network "public_network", bridge: 'wlan2'
-  config.vm.synced_folder "/home/phil/Documents/kits", "/kits"
+  config.vm.synced_folder "d:/vagrant/kits", "/kits"
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "1024"
+    vb.gui = true
   end
 config.vm.provision "shell", inline: <<-SHELL
   # setup system
-  date
-  id
+  t1=`date +%s`
   hostname v6
-  hostname
   ipaddr="`ifconfig -a | grep 192 | cut -f2 -d':' | cut -f1 -d' '`"
-  echo "$ipaddr v6" >> /etc/hosts
+  echo "$ipaddr v6-ext" >> /etc/hosts
+  echo "127.0.0.1 v6" >> /etc/hosts
   chkconfig --level 345 iptables off
   chkconfig --level 345 ip6tables off
   /etc/init.d/iptables stop
   /etc/init.d/ip6tables stop
   usermod -p '$1$aUtH9gPt$/ykXsfv.w52tq6FlBIQZC0' root # pass1234
+
+
   # setup user
   useradd -m -p '$1$aUtH9gPt$/ykXsfv.w52tq6FlBIQZC0' phil # pass1234
   cd /home/phil
   echo 'alias psme="ps aux | grep $USER"' >> .bash_profile
   echo 'alias logmon="tail -n0 -f $HOME/tomcat/logs/* $HOME/oracle/webcenter/sites/logs/*"' >> .bash_profile
+
+
   # setup java
   echo 'export JAVA_HOME=$HOME/jdk1.7.0_79' >> .bash_profile
   echo 'PATH=$JAVA_HOME/bin:$PATH' >> .bash_profile
   echo "unpacking jdk..."
   gunzip < /kits/jdk-7u79-linux-x64.tar.gz | tar xf -
   chown -R phil:phil jdk1.7.0_79
+
+
   # setup tomcat
   echo "unpacking tomcat..."
   gunzip < /kits/apache-tomcat-7.0.62.tar.gz | tar xf -
@@ -40,7 +47,6 @@ config.vm.provision "shell", inline: <<-SHELL
   echo 'CATALINA_PID=$HOME/catalina.pid' >> tomcat/bin/setenv.sh
   echo 'CLASSPATH=$HOME/oracle/webcenter/sites/bin' >> tomcat/bin/setenv.sh
   echo 'JAVA_OPTS="-Dfile.encoding=UTF-8 -Xmx512m -XX:MaxPermSize=256m -Dnet.sf.ehcache.enableShutdownHook=true "' >> tomcat/bin/setenv.sh
-  chown -R phil:phil /home/phil/tomcat
   # ..tomcat-users.xml
   sed -i '36i\
 <role rolename="manager-gui"/> \
@@ -58,12 +64,15 @@ driverClassName="org.hsqldb.jdbcDriver" \
 url="jdbc:hsqldb:/home/phil/oracle/webcenter/sites/hsqldb/csdb"/> \
 </Context>\
 ' tomcat/conf/server.xml
+  # ..tools.jar
+  cp jdk1.7.0_79/lib/tools.jar tomcat/lib
   # ..hsqldb
   echo "unpacking hsqldb..."
   unzip -q -jd tomcat/lib /kits/hsqldb_1_8_0_10.zip hsqldb/lib/hsqldb.jar
-  # ..tools.jar
-  cp jdk1.7.0_79/lib/tools.jar tomcat/lib
-  # unpack sites
+  chown -R phil:phil /home/phil/tomcat
+
+
+  # unpack sites and prepare to install
   mkdir cs-tmp
   echo "unpacking Sites 1 of 2..."
   unzip -q -jd cs-tmp /kits/V38958-01.zip WebCenterSites_11.1.1.8.0/WCS_Sites/WCS_Sites.zip
@@ -118,33 +127,12 @@ ENDSILENTCONFIG
   chown -R phil:phil /home/phil/cs-tmp
   
   
-  # run sites install, first to build the war
-  sudo -i -u phil sh -c "cd /home/phil/cs-tmp/Sites; echo | ./csInstall.sh -silent"
-  echo 
-  echo "*** "
-  echo "*** NOTE"
-  echo "*** Ignore the above failure, it is expected."
-  echo "*** Tomcat will now restart and the installer will run again"
-  echo "*** "
+  # run sites install and start tomcat"
+  sudo -i -u phil sh -c "cd /home/phil/cs-tmp/Sites; /vagrant/wait.sh | ./csInstall.sh -silent"
   # fix esapi loading
   mkdir /home/phil/esapi
   cp /home/phil/oracle/webcenter/sites/bin/ESAPI.properties /home/phil/esapi
   cp /home/phil/oracle/webcenter/sites/bin/validation.properties /home/phil/esapi
-  # startup tomcat
-  sudo -i -u phil startup.sh
-  echo "waiting 2 minutes for tomcat to start..."
-  sleep 120
-  tail -1000 /home/phil/tomcat/logs/catalina.out
-  
-  
-  # run sites installer again to do the second part
-  sed -i 's/dodeployments=true/dodeployments=false/' install.ini
-  sed -i 's/autodeploy=true/autodeploy=false/' install.ini
-  sed -i 's/doimports=false/doimports=true/' install.ini
-  sed -i 's/dodbinitialization=false/dodbinitialization=true/' install.ini
-  sed -i 's/dopingdb=false/dopingdb=true/' install.ini
-  sudo -i -u phil sh -c "cd /home/phil/cs-tmp/Sites; echo | ./csInstall.sh -silent"
-  # one more restart
   echo "finished installing sites"
   
   
@@ -153,6 +141,7 @@ ENDSILENTCONFIG
   cd /home/phil/cs-tmp/p10
   echo "unpacking patch 10..."
   unzip -q -d . /kits/p20981509_111180_Generic.zip
+  chown -R phil:phil /home/phil/cs-tmp/p10
   cd patch
   echo "installing patch 10..."
   # 1 elements
@@ -161,7 +150,8 @@ ENDSILENTCONFIG
   # 3 sites webapp
   cp -r sites_webapp/* /home/phil/tomcat/webapps/cs
   # 4 satellite.properties
-  sed -i 's/transparent.content-type.pattern=.*/transparent.content-type.pattern=text\/.*|.*xml\(?!formats\).*/' /home/phil/tomcat/webapps/cs/WEB-INF/classes/satellite.properties
+## sed -i 'd/^transparent.content-type.pattern=/' /home/phil/tomcat/webapps/cs/WEB-INF/classes/satellite.properties
+  echo "transparent.content-type.pattern=text/.*|.*xml(?!formats).*" >> /home/phil/tomcat/webapps/cs/WEB-INF/classes/satellite.properties
   # 5 cas webapp
   cp -r cas_webapp/* /home/phil/tomcat/webapps/cas
   # 6 rss webapp
@@ -176,20 +166,20 @@ ENDSILENTCONFIG
   # 11b advpub
   sed -i '42i    <property name="assumeHungTime" value="600000" />' /home/phil/tomcat/webapps/cs/WEB-INF/classes/AdvPub.xml
   # 12 spring jar
-  rm /home/phil/tomcat/webapps/cs/WEB-INF/lib/spring-2.5.5.jar
-  rm /home/phil/oracle/webcenter/sites/Sun/lib/spring-2.5.5.jar
-  rm /home/phil/tomcat/webapps/cas/WEB-INF/lib/spring-2.5.6.jar
-  rm /home/phil/oracle/webcenter/sites/ominstallinfo/cas/WEB-INF/lib/spring-2.5.6.jar
+  rm -f /home/phil/tomcat/webapps/cs/WEB-INF/lib/spring-2.5.5.jar
+  rm -f /home/phil/oracle/webcenter/sites/Sun/lib/spring-2.5.5.jar
+  rm -f /home/phil/tomcat/webapps/cas/WEB-INF/lib/spring-2.5.6.jar
+  rm -f /home/phil/oracle/webcenter/sites/ominstallinfo/cas/WEB-INF/lib/spring-2.5.6.jar
   # 13 xwork jar
-  rm /home/phil/tomcat/webapps/cs/WEB-INF/lib/xwork-2.0.4.jar
+  rm -f /home/phil/tomcat/webapps/cs/WEB-INF/lib/xwork-2.0.4.jar
   # 14 fileupload jar
-  rm /home/phil/tomcat/webapps/cs/WEB-INF/lib/commons-fileupload-1.2.1.jar
+  rm -f /home/phil/tomcat/webapps/cs/WEB-INF/lib/commons-fileupload-1.2.1.jar
   # 15 more fileupload jar
   # 16a web.xml
   sed -i '123i\
 <listener>\
-<listener-class>net.sf.ehcache.constructs.web.ShutdownListener<\/listener-class>\
-<\/listener>' /home/phil/tomcat/webapps/cs/WEB-INF/web.xml
+<listener-class>net.sf.ehcache.constructs.web.ShutdownListener</listener-class>\
+</listener>' /home/phil/tomcat/webapps/cs/WEB-INF/web.xml
   # 16b shutdownhook, already done
   # 17 both web.xml
   sed -i '264i\
@@ -236,6 +226,35 @@ ENDSILENTCONFIG
   ps -fu phil
   ifconfig -a
   df -h
-  echo "Now goto http://v6:8080/cs/"
+  t2=`date +%s`
+  t3=`expr $t2 - $t1`
+  duration=`date -u -d @$t3 +"%-M minutes %-S seconds"`
+  echo
+  echo "*** Install finished ***"
+  echo "*** Provisioned in $duration ***"
+  echo
+  echo "Now add this to your host file (/etc/hosts, or C:\Windows\System32\drivers\etc\hosts)"
+  echo "    $ipaddr v6"
+  echo "eg for Windows"
+  echo "    type $ipaddr v6 >> C:\\Windows\\System32\\drivers\\etc\\hosts"
+  echo "or unix"
+  echo "    sudo echo \\"$ipaddr v6\\" >> /etc/hosts"
+  echo "then goto http://v6:8080/cs/"
+  echo
+  echo "For shell access, you can login as vagrant user with:"
+  echo "    vagrant ssh"
+  echo "or any other user via ssh"
+  echo "    ssh <user>@v6"
+  echo "users are:"
+  echo "    root : pass1234"
+  echo "    phil : pass1234"
+  echo 
+  echo "To start X11, first download these packages"
+  echo "    yum -y groupinstall \"X Window System\""
+  echo "    yum -y groupinstall Desktop"
+  echo "    yum -y groupinstall Fonts"
+  echo "    yum -y install firefox"
+  echo "then log onto the console and start X11 with"
+  echo "    startx"
 SHELL
 end
