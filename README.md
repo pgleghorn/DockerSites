@@ -20,7 +20,7 @@ This Vagrantfile gives an Oracle WebCenter Sites 11.1.1.8.0 patch 10 single serv
 5. Download the Vagrantfile into it
 6. Edit the Vagrantfile to update with the location of your kits directory, eg
   * config.vm.synced_folder "/home/phil/Documents/kits", "/kits"
-5. Run "vagrant up", it takes about 5 minutes to install everything.
+5. Run "vagrant up", it takes about 5 minutes to install everything (longer the first time, as the centos box is downloaded)
 6. Network is bridged, and presumes existence of "wlan2", if that does not exist then vagrant will prompt to ask which adapter it should use.
 7. When complete you should see "Now goto http://v6:8080/cs/"
 8. To access the box by hostname (v6)
