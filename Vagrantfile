@@ -208,3 +208,4 @@ ENDSILENTCONFIG
   echo "which installs various rpm groups, and runs startx"
 SHELL
 end
+
