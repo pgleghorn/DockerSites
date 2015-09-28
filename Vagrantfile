@@ -4,8 +4,10 @@
 Vagrant.configure(2) do |config|
   config.vm.box = "puppetlabs/centos-6.6-64-puppet"
   config.vm.box_check_update = false
-  config.vm.network "public_network", bridge: 'wlan2'
+  config.vm.hostname = 'v8'
+  config.vm.network "public_network", bridge: 'wlan2', ip: "192.168.1.120"
   config.vm.synced_folder "C:/Users/pgleghor/Dropbox/vagrant/kits", "/kits"
+  config.vm.network :forwarded_port, guest: 8080, host: 8080
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "1024"
     vb.gui = true
@@ -13,14 +15,12 @@ Vagrant.configure(2) do |config|
 config.vm.provision "shell", inline: <<-SHELL
 
   echo
-  echo "*** setup system"
+  echo "*** setup system ***"
   echo
 
   t1=`date +%s`
-  hostname v6
-  ipaddr="`ifconfig -a | grep 192 | cut -f2 -d':' | cut -f1 -d' '`"
-  echo "$ipaddr v6-ext" >> /etc/hosts
-  echo "127.0.0.1 v6" >> /etc/hosts
+  ipaddr="192.168.1.120"
+  echo "127.0.0.1 v8" >> /etc/hosts
   chkconfig --level 345 iptables off
   chkconfig --level 345 ip6tables off
   /etc/init.d/iptables stop
@@ -28,7 +28,7 @@ config.vm.provision "shell", inline: <<-SHELL
   usermod -p '$1$aUtH9gPt$/ykXsfv.w52tq6FlBIQZC0' root # pass1234
 
   echo
-  echo "*** setup user"
+  echo "*** setup user ***"
   echo
 
   useradd -m -p '$1$aUtH9gPt$/ykXsfv.w52tq6FlBIQZC0' phil # pass1234
@@ -37,7 +37,7 @@ config.vm.provision "shell", inline: <<-SHELL
   echo 'alias logmon="tail -n0 -f $HOME/tomcat/logs/* $HOME/oracle/webcenter/sites/logs/*"' >> .bash_profile
 
   echo
-  echo "*** setup java"
+  echo "*** setup java ***"
   echo
 
   echo 'export JAVA_HOME=$HOME/jdk1.7.0_79' >> .bash_profile
@@ -46,7 +46,7 @@ config.vm.provision "shell", inline: <<-SHELL
   chown -R phil:phil jdk1.7.0_79
 
   echo
-  echo "*** setup tomcat"
+  echo "*** setup tomcat ***"
   echo
 
   gunzip < /kits/apache-tomcat-7.0.62.tar.gz | tar xf -
@@ -77,14 +77,14 @@ url="jdbc:hsqldb:/home/phil/oracle/webcenter/sites/hsqldb/csdb"/> \
   chown -R phil:phil tomcat
 
   echo
-  echo "*** setup hsqldb"
+  echo "*** setup hsqldb ***"
   echo
 
   unzip -q -jd tomcat/lib /kits/hsqldb_1_8_0_10.zip hsqldb/lib/hsqldb.jar
   chown phil:phil tomcat/lib/hsqldb.jar
 
   echo
-  echo "*** unpacking sites"
+  echo "*** unpacking sites ***"
   echo
 
   mkdir cs-tmp
@@ -92,6 +92,7 @@ url="jdbc:hsqldb:/home/phil/oracle/webcenter/sites/hsqldb/csdb"/> \
   cd cs-tmp
   unzip -q WCS_Sites.zip
   cd Sites
+  chmod 755 *.sh
   # ..re-enable hsqldb db option for tomcat
   sed -i '1916i\
 <COMBOBOXENTRY TEXT="HSQL Database Engine" HASHVALUE="HSQLDB">\
@@ -102,9 +103,9 @@ url="jdbc:hsqldb:/home/phil/oracle/webcenter/sites/hsqldb/csdb"/> \
   mkdir -p /home/phil/oracle/webcenter/sites/ominstallinfo
   cat > /home/phil/oracle/webcenter/sites/ominstallinfo/silentconfig.ini <<ENDSILENTCONFIG
 Avisports=true
-CASHostNameActual=v6
-CASHostNameLocal=v6
-CASHostName=v6
+CASHostNameActual=v8
+CASHostNameLocal=v8
+CASHostName=v8
 CASPortNumber=8080
 CASPortNumberLocal=8080
 CatalogCentre=true
@@ -122,7 +123,7 @@ CSInstallDirectory=/home/phil/oracle/webcenter/sites
 CSInstallPlatformType=APPSERVER
 CSInstallSharedDirectory=/home/phil/oracle/webcenter/Shared
 CSInstallType=single
-CSInstallWebServerAddress=v6
+CSInstallWebServerAddress=v8
 CSInstallWebServerPort=8080
 Development=true
 IsWEMInstall=TRUE
@@ -139,7 +140,7 @@ ENDSILENTCONFIG
   chown -R phil:phil /home/phil/cs-tmp
   
   echo
-  echo "*** running Sites install" 
+  echo "*** running Sites install  ***" 
   echo
 
   sudo -i -u phil sh -c "cd /home/phil/cs-tmp/Sites; /vagrant/wait.sh | ./csInstall.sh -silent"
@@ -149,94 +150,18 @@ ENDSILENTCONFIG
   cp /home/phil/oracle/webcenter/sites/bin/validation.properties /home/phil/esapi
 
   echo
-  echo "*** installing support tools"
+  echo "*** installing support tools ***"
   echo
 
   mkdir /home/phil/cs-tmp/supporttools
   unzip -q -d /home/phil/cs-tmp/supporttools /kits/SupportTools-4.3.zip
   chown -R phil:phil /home/phil/cs-tmp/supporttools
-  sudo -i -u phil sh -c "java -cp \"/home/phil/tomcat/webapps/cs/WEB-INF/lib/*:/home/phil/tomcat/lib/*\" COM.FutureTense.Apps.CatalogMover -p password -u ContentServer -b http://v6:8080/cs/CatalogManager -x import_all -d /home/phil/cs-tmp/supporttools"
+  sudo -i -u phil sh -c "java -cp \"/home/phil/tomcat/webapps/cs/WEB-INF/lib/*:/home/phil/tomcat/lib/*\" COM.FutureTense.Apps.CatalogMover -p password -u ContentServer -b http://v8:8080/cs/CatalogManager -x import_all -d /home/phil/cs-tmp/supporttools"
 
   echo
   echo "*** installing patch 10"
   echo
-
-  mkdir /home/phil/cs-tmp/p10
-  cd /home/phil/cs-tmp/p10
-  unzip -q -d . /kits/p20981509_111180_Generic.zip
-  chown -R phil:phil /home/phil/cs-tmp/p10
-  cd patch
-  # 1 elements
-  sudo -i -u phil sh -c "java -cp \"/home/phil/tomcat/webapps/cs/WEB-INF/lib/*:/home/phil/tomcat/lib/*\" COM.FutureTense.Apps.CatalogMover -p xceladmin -u fwadmin -b http://v6:8080/cs/CatalogManager -x import_all -d /home/phil/cs-tmp/p10/patch/elements"
-  # 2 eloqua
-  # 3 sites webapp
-  cp -r sites_webapp/* /home/phil/tomcat/webapps/cs
-  # 4 satellite.properties
-  sed -i 'd/^transparent.content-type.pattern=/' /home/phil/tomcat/webapps/cs/WEB-INF/classes/satellite.properties
-  echo "transparent.content-type.pattern=text/.*|.*xml(?!formats).*" >> /home/phil/tomcat/webapps/cs/WEB-INF/classes/satellite.properties
-  # 5 cas webapp
-  cp -r cas_webapp/* /home/phil/tomcat/webapps/cas
-  # 6 rss webapp
-  # 7 same as 4
-  # 8 sites folder
-  cp -r sites_install/* /home/phil/oracle/webcenter/sites
-  # 9 csdt
-  # 10 avisports elements
-  sudo -i -u phil sh -c "java -cp \"/home/phil/tomcat/webapps/cs/WEB-INF/lib/*:/home/phil/tomcat/lib/*\" COM.FutureTense.Apps.CatalogMover -p xceladmin -u fwadmin -b http://v6:8080/cs/CatalogManager -x import_all -d /home/phil/cs-tmp/p10/patch/avisports/elements"
-  # 11a advpub
-  sed -i '96i    <bean id="AssetPublishCallback" class="com.fatwire.realtime.messaging.AssetPublishCallbackImpl" singleton="false"/>' /home/phil/tomcat/webapps/cs/WEB-INF/classes/AdvPub.xml
-  # 11b advpub
-  sed -i '42i    <property name="assumeHungTime" value="600000" />' /home/phil/tomcat/webapps/cs/WEB-INF/classes/AdvPub.xml
-  # 12 spring jar
-  rm -f /home/phil/tomcat/webapps/cs/WEB-INF/lib/spring-2.5.5.jar
-  rm -f /home/phil/oracle/webcenter/sites/Sun/lib/spring-2.5.5.jar
-  rm -f /home/phil/tomcat/webapps/cas/WEB-INF/lib/spring-2.5.6.jar
-  rm -f /home/phil/oracle/webcenter/sites/ominstallinfo/cas/WEB-INF/lib/spring-2.5.6.jar
-  # 13 xwork jar
-  rm -f /home/phil/tomcat/webapps/cs/WEB-INF/lib/xwork-2.0.4.jar
-  # 14 fileupload jar
-  rm -f /home/phil/tomcat/webapps/cs/WEB-INF/lib/commons-fileupload-1.2.1.jar
-  # 15 more fileupload jar
-  # 16a web.xml
-  sed -i '123i\
-<listener>\
-<listener-class>net.sf.ehcache.constructs.web.ShutdownListener</listener-class>\
-</listener>' /home/phil/tomcat/webapps/cs/WEB-INF/web.xml
-  # 16b shutdownhook, already done
-  # 17 both web.xml
-  sed -i '264i\
-<security-constraint>\
-<web-resource-collection>\
-<web-resource-name>NoAccess</web-resource-name>\
-<url-pattern>/jsp/cs_deployed/*</url-pattern>\
-</web-resource-collection>\
-<auth-constraint/>\
-<user-data-constraint>\
-<description/>\
-<transport-guarantee>NONE</transport-guarantee>\
-</user-data-constraint>\
-</security-constraint>' /home/phil/tomcat/webapps/cs/WEB-INF/web.xml
-  sed -i '231i\
-<security-constraint>\
-<web-resource-collection>\
-<web-resource-name>NoAccess</web-resource-name>\
-<url-pattern>/jsp/cs_deployed/*</url-pattern>\
-</web-resource-collection>\
-<auth-constraint/>\
-<user-data-constraint>\
-<description/>\
-<transport-guarantee>NONE</transport-guarantee>\
-</user-data-constraint>\
-</security-constraint>' /home/phil/tomcat/webapps/cas/WEB-INF/web.xml
-  # 18 todo content security filter
-  # 19 eloqua - skip
-  # 20 todo ckeditor
-  # 21 caseaware - skip
-  # 22 reindex - skip (warn todo this)
-  # 23 revisions
-  echo "cs.deleteExcessRevisionsFromDisk=true" >> /home/phil/oracle/webcenter/sites/futuretense.ini
-  # 24 eloqua - skip
-  # 25 eloqua - skip
+  /vagrant/scripts/patch10.sh
 
   echo
   echo "*** misc sites config ***"
@@ -262,27 +187,24 @@ ENDSILENTCONFIG
   echo
 
   echo "Now add this to your host file (/etc/hosts, or C:\\Windows\\System32\\drivers\\etc\\hosts)"
-  echo "    $ipaddr v6"
+  echo "    $ipaddr v8"
   echo "eg for Windows"
-  echo "    type $ipaddr v6 >> C:\\Windows\\System32\\drivers\\etc\\hosts"
+  echo "    type $ipaddr v8 >> C:\\Windows\\System32\\drivers\\etc\\hosts"
   echo "or unix"
-  echo "    sudo echo \\"$ipaddr v6\\" >> /etc/hosts"
-  echo "then goto http://v6:8080/cs/"
+  echo "    sudo echo \\"$ipaddr v8\\" >> /etc/hosts"
+  echo "then goto http://v8:8080/cs/"
   echo
   echo "For shell access, you can login as vagrant user directly with:"
   echo "    vagrant ssh"
   echo "or any other user via ssh"
-  echo "    ssh <user>@v6"
+  echo "    ssh <user>@v8"
   echo "users are:"
   echo "    root : pass1234"
   echo "    phil : pass1234"
   echo "    vagrant : vagrant"
   echo 
-  echo "To start X11, log onto the virtualbox console and then:"
-  echo "    yum -y groupinstall \\"X Window System\\""
-  echo "    yum -y groupinstall Desktop"
-  echo "    yum -y groupinstall Fonts"
-  echo "    yum -y install firefox"
-  echo "    startx"
+  echo "To start X11, log onto the virtualbox console and then run:"
+  echo "    /vagrant/x11.sh"
+  echo "which installs various rpm groups, and runs startx"
 SHELL
 end
