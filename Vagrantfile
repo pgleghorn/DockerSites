@@ -159,8 +159,9 @@ ENDSILENTCONFIG
   sudo -i -u phil sh -c "java -cp \"/home/phil/tomcat/webapps/cs/WEB-INF/lib/*:/home/phil/tomcat/lib/*\" COM.FutureTense.Apps.CatalogMover -p password -u ContentServer -b http://v8:8080/cs/CatalogManager -x import_all -d /home/phil/cs-tmp/supporttools"
 
   echo
-  echo "*** installing patch 10"
+  echo "*** installing patch ***"
   echo
+  #/vagrant/scripts/patch6.sh
   /vagrant/scripts/patch10.sh
 
   echo
