@@ -1,0 +1,3 @@
+<!-- start patch modification -->
+<bean id="AssetPublishCallback" class="com.fatwire.realtime.messaging.AssetPublishCallbackImpl" singleton="false" />
+<!-- end patch modification -->

@@ -1,0 +1,13 @@
+<!-- begin patch modification -->
+<security-constraint>
+<web-resource-collection>
+<web-resource-name>NoAccess</web-resource-name>
+<url-pattern>/jsp/cs_deployed/*</url-pattern>
+</web-resource-collection>
+<auth-constraint/>
+<user-data-constraint>
+<description/>
+<transport-guarantee>NONE</transport-guarantee>
+</user-data-constraint>
+</security-constraint>
+<!-- end patch modification -->

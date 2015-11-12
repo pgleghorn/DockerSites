@@ -1,0 +1,10 @@
+<!-- start patch modification -->
+<filter>
+<filter-name>Eloqua Request Authentication Filter</filter-name>
+<filter-class>oracle.wcsites.eloquaintegration.EloquaAuthenticationFilter</filter-class>
+<init-param>
+<param-name>protectedPages</param-name>
+<param-value> EloquaIntegration/Enable,EloquaIntegration/SitesStatus,EloquaIntegration/Instances/Copy,EloquaIntegration/ContentSearch,EloquaIntegration/Instances/Add,EloquaIntegration/Instances/Delete,EloquaIntegration/ContentPreview,EloquaIntegration/Processor/FirehoseNotification</param-value>
+</init-param>
+</filter>
+<!-- end patch modification -->

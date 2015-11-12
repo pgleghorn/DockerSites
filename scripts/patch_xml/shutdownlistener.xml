@@ -1,0 +1,5 @@
+<!-- start patch modification -->
+<listener>
+<listener-class>net.sf.ehcache.constructs.web.ShutdownListener</listener-class>
+</listener>
+<!-- end patch modification -->

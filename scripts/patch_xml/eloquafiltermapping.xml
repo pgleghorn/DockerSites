@@ -1,0 +1,6 @@
+<!-- start patch modification -->
+<filter-mapping>
+<filter-name>Eloqua Request Authentication Filter</filter-name>
+<url-pattern>/ContentServer/*</url-pattern>
+</filter-mapping>
+<!-- end patch modification -->

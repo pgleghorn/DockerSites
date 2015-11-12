@@ -8,6 +8,7 @@ Vagrant.configure(2) do |config|
   config.vm.network "public_network", bridge: 'wlan2', ip: "192.168.1.120"
   config.vm.synced_folder "C:/Users/pgleghor/Dropbox/vagrant/kits", "/kits"
   config.vm.network :forwarded_port, guest: 8080, host: 8080
+  config.vm.network :forwarded_port, guest: 22, host: 28080
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "1024"
     vb.gui = true
@@ -143,7 +144,7 @@ ENDSILENTCONFIG
   echo "*** running Sites install  ***" 
   echo
 
-  sudo -i -u phil sh -c "cd /home/phil/cs-tmp/Sites; /vagrant/wait.sh | ./csInstall.sh -silent"
+  sudo -i -u phil sh -c "cd /home/phil/cs-tmp/Sites; /vagrant/scripts/wait.sh | ./csInstall.sh -silent"
   # fix esapi loading
   mkdir /home/phil/esapi
   cp /home/phil/oracle/webcenter/sites/bin/ESAPI.properties /home/phil/esapi
@@ -159,17 +160,18 @@ ENDSILENTCONFIG
   sudo -i -u phil sh -c "java -cp \"/home/phil/tomcat/webapps/cs/WEB-INF/lib/*:/home/phil/tomcat/lib/*\" COM.FutureTense.Apps.CatalogMover -p password -u ContentServer -b http://v8:8080/cs/CatalogManager -x import_all -d /home/phil/cs-tmp/supporttools"
 
   echo
-  echo "*** installing patch ***"
-  echo
-  #/vagrant/scripts/patch6.sh
-  /vagrant/scripts/patch10.sh
-
-  echo
   echo "*** misc sites config ***"
   echo
 
   sed -i 's/cs.timeout=.*/cs.timeout=18000/' /home/phil/oracle/webcenter/sites/futuretense.ini
   sed -i 's/advancedUI.enableAssetForms=false/advancedUI.enableAssetForms=true/' /home/phil/oracle/webcenter/sites/futuretense_xcel.ini
+
+  echo
+  echo "*** installing patch ***"
+  echo
+  #/vagrant/scripts/patch6.sh
+  #/vagrant/scripts/patch10.sh
+  /vagrant/scripts/patch11.sh
 
   echo
   echo "*** Install finished ***"
@@ -205,7 +207,7 @@ ENDSILENTCONFIG
   echo "    vagrant : vagrant"
   echo 
   echo "To start X11, log onto the virtualbox console and then run:"
-  echo "    /vagrant/x11.sh"
+  echo "    /vagrant/scripts/x11.sh"
   echo "which installs various rpm groups, and runs startx"
 SHELL
 end

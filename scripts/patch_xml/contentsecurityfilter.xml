@@ -1,0 +1,6 @@
+<!-- start patch modification -->
+<filter>
+<filter-name>Content Security Filter</filter-name>
+<filter-class>COM.FutureTense.Security.Common.ContentSecurityFilter</filter-class>
+</filter>
+<!-- end patch modification -->
