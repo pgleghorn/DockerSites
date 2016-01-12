@@ -8,16 +8,16 @@ Vagrant.configure(2) do |config|
   config.vm.network "public_network", bridge: 'wlan2', ip: "192.168.1.120"
   config.vm.synced_folder "C:/Users/pgleghor/Dropbox/vagrant/kits", "/kits"
   config.vm.network :forwarded_port, guest: 8080, host: 8080
-  config.vm.network :forwarded_port, guest: 22, host: 28080
+  config.vm.network :forwarded_port, guest: 22, host: 2555, id: "ssh"
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "1024"
     vb.gui = true
   end
 config.vm.provision "shell", inline: <<-SHELL
 
-  echo
-  echo "*** setup system ***"
-  echo
+  echo "***"
+  echo "*** setup system"
+  echo "***"
 
   t1=`date +%s`
   ipaddr="192.168.1.120"
@@ -28,34 +28,34 @@ config.vm.provision "shell", inline: <<-SHELL
   /etc/init.d/ip6tables stop
   usermod -p '$1$aUtH9gPt$/ykXsfv.w52tq6FlBIQZC0' root # pass1234
 
-  echo
-  echo "*** setup user ***"
-  echo
+  echo "***"
+  echo "*** setup user"
+  echo "***"
 
   useradd -m -p '$1$aUtH9gPt$/ykXsfv.w52tq6FlBIQZC0' phil # pass1234
   cd /home/phil
   echo 'alias psme="ps aux | grep $USER"' >> .bash_profile
   echo 'alias logmon="tail -n0 -f $HOME/tomcat/logs/* $HOME/oracle/webcenter/sites/logs/*"' >> .bash_profile
 
-  echo
-  echo "*** setup java ***"
-  echo
+  echo "***"
+  echo "*** setup java"
+  echo "***"
 
   echo 'export JAVA_HOME=$HOME/jdk1.7.0_79' >> .bash_profile
   echo 'PATH=$JAVA_HOME/bin:$PATH' >> .bash_profile
   gunzip < /kits/jdk-7u79-linux-x64.tar.gz | tar xf -
   chown -R phil:phil jdk1.7.0_79
 
-  echo
-  echo "*** setup tomcat ***"
-  echo
+  echo "***"
+  echo "*** setup tomcat"
+  echo "***"
 
   gunzip < /kits/apache-tomcat-7.0.62.tar.gz | tar xf -
   mv apache-tomcat-7.0.62 tomcat
   echo 'PATH=$HOME/tomcat/bin:$PATH' >> .bash_profile
   echo 'CATALINA_PID=$HOME/catalina.pid' >> tomcat/bin/setenv.sh
   echo 'CLASSPATH=$HOME/oracle/webcenter/sites/bin' >> tomcat/bin/setenv.sh
-  echo 'JAVA_OPTS="-Dfile.encoding=UTF-8 -Xmx512m -XX:MaxPermSize=256m -Dnet.sf.ehcache.enableShutdownHook=true "' >> tomcat/bin/setenv.sh
+  echo 'JAVA_OPTS=" -Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8 -Xmx512m -XX:MaxPermSize=256m -Dnet.sf.ehcache.enableShutdownHook=true "' >> tomcat/bin/setenv.sh
   # ..tomcat-users.xml
   sed -i '36i\
 <role rolename="manager-gui"/> \
@@ -77,16 +77,16 @@ url="jdbc:hsqldb:/home/phil/oracle/webcenter/sites/hsqldb/csdb"/> \
   cp jdk1.7.0_79/lib/tools.jar tomcat/lib
   chown -R phil:phil tomcat
 
-  echo
-  echo "*** setup hsqldb ***"
-  echo
+  echo "***"
+  echo "*** setup hsqldb"
+  echo "***"
 
   unzip -q -jd tomcat/lib /kits/hsqldb_1_8_0_10.zip hsqldb/lib/hsqldb.jar
   chown phil:phil tomcat/lib/hsqldb.jar
 
-  echo
-  echo "*** unpacking sites ***"
-  echo
+  echo "***"
+  echo "*** unpacking sites"
+  echo "***"
 
   mkdir cs-tmp
   unzip -q -jd cs-tmp /kits/V38958-01.zip WebCenterSites_11.1.1.8.0/WCS_Sites/WCS_Sites.zip
@@ -140,9 +140,9 @@ ENDSILENTCONFIG
   sed -i 's/loadfile=/loadfile=\\/home\\/phil\\/oracle\\/webcenter\\/sites\\/ominstallinfo\\/silentconfig.ini/' install.ini
   chown -R phil:phil /home/phil/cs-tmp
   
-  echo
-  echo "*** running Sites install  ***" 
-  echo
+  echo "***"
+  echo "*** running Sites install" 
+  echo "***"
 
   sudo -i -u phil sh -c "cd /home/phil/cs-tmp/Sites; /vagrant/scripts/wait.sh | ./csInstall.sh -silent"
   # fix esapi loading
@@ -150,32 +150,32 @@ ENDSILENTCONFIG
   cp /home/phil/oracle/webcenter/sites/bin/ESAPI.properties /home/phil/esapi
   cp /home/phil/oracle/webcenter/sites/bin/validation.properties /home/phil/esapi
 
-  echo
-  echo "*** installing support tools ***"
-  echo
+  echo "***"
+  echo "*** installing support tools"
+  echo "***"
 
   mkdir /home/phil/cs-tmp/supporttools
   unzip -q -d /home/phil/cs-tmp/supporttools /kits/SupportTools-4.3.zip
   chown -R phil:phil /home/phil/cs-tmp/supporttools
   sudo -i -u phil sh -c "java -cp \"/home/phil/tomcat/webapps/cs/WEB-INF/lib/*:/home/phil/tomcat/lib/*\" COM.FutureTense.Apps.CatalogMover -p password -u ContentServer -b http://v8:8080/cs/CatalogManager -x import_all -d /home/phil/cs-tmp/supporttools"
 
-  echo
-  echo "*** misc sites config ***"
-  echo
+  echo "***"
+  echo "*** misc sites config"
+  echo "***"
 
   sed -i 's/cs.timeout=.*/cs.timeout=18000/' /home/phil/oracle/webcenter/sites/futuretense.ini
   sed -i 's/advancedUI.enableAssetForms=false/advancedUI.enableAssetForms=true/' /home/phil/oracle/webcenter/sites/futuretense_xcel.ini
 
-  echo
-  echo "*** installing patch ***"
-  echo
+  echo "***"
+  echo "*** installing patch"
+  echo "***"
   #/vagrant/scripts/patch6.sh
   #/vagrant/scripts/patch10.sh
   /vagrant/scripts/patch11.sh
 
-  echo
-  echo "*** Install finished ***"
-  echo
+  echo "***"
+  echo "*** Install finished"
+  echo "***"
 
   cat /etc/hosts
   ps -fu phil
@@ -185,10 +185,23 @@ ENDSILENTCONFIG
   t3=`expr $t2 - $t1`
   duration=`date -u -d @$t3 +"%-M minutes %-S seconds"`
 
-  echo
-  echo "*** Provisioned in $duration ***"
-  echo
+  echo "***"
+  echo "*** cleanup"
+  echo "***"
+  #rm -rf /home/phil/cs-tmp
+  echo "***"
+  echo "*** Provisioned in $duration"
+  echo "***"
 
+  echo "***"
+  echo "*** final restart"
+  echo "***"
+  sudo -i -u phil sh -c "shutdown.sh -force"
+  rm -rf /home/phil/tomcat/temp
+  sudo -i -u phil sh -c "startup.sh"
+  echo "***"
+  echo "*** done" 
+  echo "***"
   echo "Now add this to your host file (/etc/hosts, or C:\\Windows\\System32\\drivers\\etc\\hosts)"
   echo "    $ipaddr v8"
   echo "eg for Windows"
@@ -197,10 +210,10 @@ ENDSILENTCONFIG
   echo "    sudo echo \\"$ipaddr v8\\" >> /etc/hosts"
   echo "then goto http://v8:8080/cs/"
   echo
-  echo "For shell access, you can login as vagrant user directly with:"
+  echo "For shell access, login as vagrant user directly with:"
   echo "    vagrant ssh"
   echo "or any other user via ssh"
-  echo "    ssh <user>@v8"
+  echo "    ssh -p 2555 <user>@v8"
   echo "users are:"
   echo "    root : pass1234"
   echo "    phil : pass1234"
@@ -208,7 +221,7 @@ ENDSILENTCONFIG
   echo 
   echo "To start X11, log onto the virtualbox console and then run:"
   echo "    /vagrant/scripts/x11.sh"
-  echo "which installs various rpm groups, and runs startx"
+  echo "which installs various rpm groups and runs startx"
 SHELL
 end
 

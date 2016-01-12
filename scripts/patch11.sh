@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -x
   mkdir /home/phil/cs-tmp/p11
   cd /home/phil/cs-tmp/p11
   unzip -q -d . /kits/p21494888_111180_Generic.zip
@@ -11,8 +11,8 @@
   sleep 30 # wait for tomcat to deploy it
   # 2 cas webapp backup
   # 3 new cas config
-  cp -r /home/phil/oracle/webcenter/sites/bin/* /home/phil/oracle/webcenter/sites/bin_backup_pre_p11
   mkdir /home/phil/oracle/webcenter/sites/bin_backup_pre_p11
+  cp -r /home/phil/oracle/webcenter/sites/bin/* /home/phil/oracle/webcenter/sites/bin_backup_pre_p11
   cp -r cas_upgrade/config/cas/* /home/phil/oracle/webcenter/sites/bin
   # 4 tweak cas config
   bindir=/home/phil/oracle/webcenter/sites/bin
@@ -82,10 +82,12 @@
   echo "log4j.logger.oracle.wcsites.eloquaintegration=INFO" >> /home/phil/tomcat/webapps/cs/WEB-INF/classes/log4j.properties
   echo "log4j.logger.oracle.wcsites.eloquaintegration.jsp=INFO" >> /home/phil/tomcat/webapps/cs/WEB-INF/classes/log4j.properties
   # 25 youtube assets
-  echo "cs.youtubeapikey=provideYourOwnKey" >> /home/phil/sites/futuretense.ini
+  echo "cs.youtubeapikey=provideYourOwnKey" >> /home/phil/oracle/webcenter/sites/futuretense.ini
   # 26 elements
-  sudo -i -u phil sh -c "java -cp \"/home/phil/tomcat/webapps/cs/WEB-INF/lib/*:/home/phil/tomcat/lib/*\" COM.FutureTense.Apps.CatalogMover -p xceladmin -u fwadmin -b http://v8:8080/cs/CatalogManager -x import_all -d /home/phil/cs-tmp/p10/patch/elements"
+  sudo -i -u phil sh -c "java -cp \"/home/phil/tomcat/webapps/cs/WEB-INF/lib/*:/home/phil/tomcat/lib/*\" COM.FutureTense.Apps.CatalogMover -p xceladmin -u fwadmin -b http://v8:8080/cs/CatalogManager -x import_all -d /home/phil/cs-tmp/p11/patch/elements"
   # 27 eloqua elements
-  sudo -i -u phil sh -c "java -cp \"/home/phil/tomcat/webapps/cs/WEB-INF/lib/*:/home/phil/tomcat/lib/*\" COM.FutureTense.Apps.CatalogMover -p xceladmin -u fwadmin -b http://v8:8080/cs/CatalogManager -x import_all -d /home/phil/cs-tmp/p10/patch/eloqua-integation"
+  sudo -i -u phil sh -c "java -cp \"/home/phil/tomcat/webapps/cs/WEB-INF/lib/*:/home/phil/tomcat/lib/*\" COM.FutureTense.Apps.CatalogMover -p xceladmin -u fwadmin -b http://v8:8080/cs/CatalogManager -x import_all -d /home/phil/cs-tmp/p11/patch/eloqua-integration"
   # 28 avisports elements
-  sudo -i -u phil sh -c "java -cp \"/home/phil/tomcat/webapps/cs/WEB-INF/lib/*:/home/phil/tomcat/lib/*\" COM.FutureTense.Apps.CatalogMover -p xceladmin -u fwadmin -b http://v8:8080/cs/CatalogManager -x import_all -d /home/phil/cs-tmp/p10/patch/avisports/elements"
+  sudo -i -u phil sh -c "java -cp \"/home/phil/tomcat/webapps/cs/WEB-INF/lib/*:/home/phil/tomcat/lib/*\" COM.FutureTense.Apps.CatalogMover -p xceladmin -u fwadmin -b http://v8:8080/cs/CatalogManager -x import_all -d /home/phil/cs-tmp/p11/patch/avisports/elements"
+  # other, dojo tree
+  sed -i -e 's/xcelerate.treeType=OMTree/xcelerate.treeType=DojoTree/g' /home/phil/oracle/webcenter/sites/futuretense_xcel.ini

@@ -48,5 +48,6 @@ This Vagrantfile gives an Oracle WebCenter Sites 11.1.1.8.0 patch 11 single serv
 * wine & sites explorer
 * eclipse integration
 * clusters
+* analytics
 
 
