@@ -49,5 +49,6 @@ The Network is bridged, and presumes existence of "wlan2", if that does not exis
 * eclipse integration
 * clusters
 * analytics
+* psi-probe
 
 
