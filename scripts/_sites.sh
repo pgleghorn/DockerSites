@@ -68,7 +68,7 @@ chown -R $V_UNIXUSER:$V_UNIXGROUP $V_SITES_INSTALLDIR
 chown -R $V_UNIXUSER:$V_UNIXGROUP $V_SITES_SHAREDDIR
 
 # run
-sudo -i -u $V_UNIXUSER sh -c ". /vagrant/config.sh; cd /tmp/Sites; /vagrant/scripts/wait.sh | ./csInstall.sh -silent"
+sudo -i -u $V_UNIXUSER sh -c "set -a; . /vagrant/config.sh; cd /tmp/Sites; /vagrant/scripts/wait.sh | ./csInstall.sh -silent"
 
 # fix esapi loading
 mkdir $V_UNIXUSERHOME/esapi

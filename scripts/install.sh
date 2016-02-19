@@ -1,5 +1,6 @@
 #!/bin/sh
 
+set -a
 . /vagrant/config.sh
 /vagrant/scripts/_system.sh
 /vagrant/scripts/_java.sh

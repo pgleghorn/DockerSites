@@ -91,10 +91,10 @@ echo "log4j.logger.oracle.wcsites.eloquaintegration.jsp=INFO" >> $V_TOMCAT_INSTA
 # 25 youtube assets
 echo "cs.youtubeapikey=provideYourOwnKey" >> $V_SITES_INSTALLDIR/futuretense.ini
 # 26 elements
-sudo -i -u $V_UNIXUSER sh -c "java -cp \"$V_TOMCAT_INSTALLDIR/webapps/cs/WEB-INF/lib/*:$V_TOMCAT_INSTALLDIR/lib/*\" COM.FutureTense.Apps.CatalogMover -p xceladmin -u fwadmin -b http://$V_HOSTNAME:$V_PORT/cs/CatalogManager -x import_all -d /tmp/p11/patch/elements"
+sudo -i -u $V_UNIXUSER sh -c "set -a; . /vagrant/config.sh; java -cp \"$V_TOMCAT_INSTALLDIR/webapps/cs/WEB-INF/lib/*:$V_TOMCAT_INSTALLDIR/lib/*\" COM.FutureTense.Apps.CatalogMover -p xceladmin -u fwadmin -b http://$V_HOSTNAME:$V_PORT/cs/CatalogManager -x import_all -d /tmp/p11/patch/elements"
 # 27 eloqua elements
-sudo -i -u $V_UNIXUSER sh -c "java -cp \"$V_TOMCAT_INSTALLDIR/webapps/cs/WEB-INF/lib/*:$V_TOMCAT_INSTALLDIR/lib/*\" COM.FutureTense.Apps.CatalogMover -p xceladmin -u fwadmin -b http://$V_HOSTNAME:$V_PORT/cs/CatalogManager -x import_all -d /tmp/p11/patch/eloqua-integration"
+sudo -i -u $V_UNIXUSER sh -c "set -a; . /vagrant/config.sh; java -cp \"$V_TOMCAT_INSTALLDIR/webapps/cs/WEB-INF/lib/*:$V_TOMCAT_INSTALLDIR/lib/*\" COM.FutureTense.Apps.CatalogMover -p xceladmin -u fwadmin -b http://$V_HOSTNAME:$V_PORT/cs/CatalogManager -x import_all -d /tmp/p11/patch/eloqua-integration"
 # 28 avisports elements
-sudo -i -u $V_UNIXUSER sh -c "java -cp \"$V_TOMCAT_INSTALLDIR/webapps/cs/WEB-INF/lib/*:$V_TOMCAT_INSTALLDIR/lib/*\" COM.FutureTense.Apps.CatalogMover -p xceladmin -u fwadmin -b http://$V_HOSTNAME:$V_PORT/cs/CatalogManager -x import_all -d /tmp/p11/patch/avisports/elements"
+sudo -i -u $V_UNIXUSER sh -c "set -a; . /vagrant/config.sh; java -cp \"$V_TOMCAT_INSTALLDIR/webapps/cs/WEB-INF/lib/*:$V_TOMCAT_INSTALLDIR/lib/*\" COM.FutureTense.Apps.CatalogMover -p xceladmin -u fwadmin -b http://$V_HOSTNAME:$V_PORT/cs/CatalogManager -x import_all -d /tmp/p11/patch/avisports/elements"
 # other, dojo tree
 sed -i -e 's/xcelerate.treeType=OMTree/xcelerate.treeType=DojoTree/g' $V_SITES_INSTALLDIR/futuretense_xcel.ini
