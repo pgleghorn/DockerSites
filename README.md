@@ -1,7 +1,7 @@
 # VagrantSites
 Vagrant script to perform a fully unattended installation of Oracle WebCenter Sites including OS, application server, DB, Sites and patches.
 
-This Vagrantfile gives an Oracle WebCenter Sites 11.1.1.8.0 patch 11 single server development installation with cas, AviSports sample site, and support tools 4.3. It uses tomcat 7 and hsqldb 1.8, on centos 6.6. This uses a virtualbox provider, and shell provisioner script to do the installation work. It presumes cygwin or linux.
+This Vagrantfile gives an Oracle WebCenter Sites 11.1.1.8.0 patch 11 single server development installation with cas, AviSports sample site, and support tools 4.3. It uses tomcat 7 and hsqldb 1.8, on centos 6.6. This uses a virtualbox provider, and shell provisioner script to do the installation work.
 
 *This Vagrantfile is not an official Oracle product, and the stack it produces is not supported (centos, hsqldb).*
 
@@ -22,7 +22,7 @@ This Vagrantfile gives an Oracle WebCenter Sites 11.1.1.8.0 patch 11 single serv
  * set V_HOSTNAME to the desired hostname
  * set V_IP_ADDRESS to the desired IP address
  * set V_PORT to the desired port
-6. Run "./run.sh" to install everything.
+6. Run "vagrant up" to install everything.
 
 It takes about 5 minutes to install everything (longer the first time, as the centos box is downloaded)
 
@@ -50,5 +50,7 @@ The Network is bridged, and presumes existence of "wlan2", if that does not exis
 * clusters
 * analytics
 * psi-probe
+~~dont require cygwin/linux~~
+* proper xml file editing (eg augeas) not sed
 
 
