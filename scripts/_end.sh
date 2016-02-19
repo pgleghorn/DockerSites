@@ -11,6 +11,8 @@ echo ""
 #ifconfig -a
 #df -h
 
+echo "Checking HelloCS..."
+wget -q -O - $V_HOSTNAME:$V_PORT/cs/HelloCS | sed -e 's/<[^<>]*>//g'
 echo ""
 echo "Now add this to your host file (/etc/hosts, or C:\\Windows\\System32\\drivers\\etc\\hosts)"
 echo "    $V_IP_ADDRESS $V_HOSTNAME"
@@ -19,7 +21,7 @@ echo
 echo "For shell access, login as vagrant user directly with:"
 echo "    vagrant ssh"
 echo "or any other user via ssh"
-echo "    ssh -p $V_VAGRANTSSHPORT <user>@$V_HOSTNAME"
+echo "    ssh -p $V_VAGRANT_SSHPORT <user>@$V_HOSTNAME"
 echo "users are:"
 echo "    root : pass1234"
 echo "    phil : pass1234"
