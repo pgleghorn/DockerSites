@@ -6,7 +6,7 @@ echo "*** setup system"
 echo "***"
 echo ""
 
-t1=`date +%s`
+hostname $V_HOSTNAME
 ipaddr=$V_IP_ADDRESS
 echo "127.0.0.1 $V_HOSTNAME" >> /etc/hosts
 chkconfig --level 345 iptables off
