@@ -2,8 +2,10 @@
 # vi: set ft=ruby :
 
 File.open('config.sh', 'r').each_line do |line|
+  line = line.chomp.lstrip
   next if line.start_with? '#'
-  k,v = line.chomp.split('=', 2)
+  next if line.empty?
+  k,v = line.split('=', 2)
   ENV[k] = v
 end
 
