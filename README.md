@@ -50,7 +50,7 @@ The Network is bridged, and presumes existence of "wlan2", if that does not exis
 * clusters
 * analytics
 * psi-probe
-~~dont require cygwin/linux~~
+* ~~dont require cygwin/linux~~
 * proper xml file editing (eg augeas) not sed
 
 
