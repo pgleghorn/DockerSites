@@ -1,11 +1,14 @@
 # VagrantSites
-Vagrant script to perform a fully unattended installation of Oracle WebCenter Sites including OS, application server, DB, Sites and patches.
+This repo provides two methods (Vagrant and Docker) to perform a fully unattended installation of Oracle WebCenter Sites including OS, application server, DB, Sites and patches.
 
-This Vagrantfile gives an Oracle WebCenter Sites 11.1.1.8.0 patch 11 single server development installation with cas, AviSports sample site, and support tools 4.3. It uses tomcat 7 and hsqldb 1.8, on centos 6.6. This uses a virtualbox provider, and shell provisioner script to do the installation work.
+Both methods produce an Oracle WebCenter Sites 11.1.1.8.0 patch 11 single server development installation with cas, AviSports sample site, and optionally support tools 4.3. It uses java 1.8, tomcat 7 and hsqldb 1.8, on centos 6.6.
 
-*This Vagrantfile is not an official Oracle product, and the stack it produces is not supported (centos, hsqldb).*
+The Vagrant method uses a virtualbox provider, and shell provisioner scripts to do the installation work.
+The Docker method uses exactly the same underlying scripts to perform the installation.
 
-### Usage:
+*These scripts are not an official Oracle product, and the stack they produce is not supported (centos, hsqldb).*
+
+### Usage - Vagrant:
 
 1. Install vagrant
 2. Create a directory to store the installation kits, eg /home/phil/Documents/kits
@@ -13,9 +16,9 @@ This Vagrantfile gives an Oracle WebCenter Sites 11.1.1.8.0 patch 11 single serv
   * jdk-7u79-linux-x64.tar.gz
   * apache-tomcat-7.0.62.tar.gz
   * hsqldb_1_8_0_10.zip
-  * V38958-01.zip (webcenter sites 11.1.1.8.0 kit from oracle edelivery)
+  * ofm_sites_generic_11.1.1.8.0_disk1_1of1.zip (webcenter sites 11.1.1.8.0 kit from OTN)
   * p21494888_111180_Generic.zip (webcenter sites 11.1.1.8.0 patch 11 kit from oracle support)
-  * SupportTools-4.3.zip (webcenter sites support tools 4.3 from oracle support)
+  * optional: SupportTools-4.3.zip (webcenter sites support tools 4.3 from oracle support)
 4. Clone this repository, e.g. git clone https://github.com/pgleghorn/VagrantSites.git
 5. Edit config.sh and change required params
  * set V_KITS_DIRECTORY to the directory from step 2
@@ -27,6 +30,18 @@ This Vagrantfile gives an Oracle WebCenter Sites 11.1.1.8.0 patch 11 single serv
 It takes about 5 minutes to install everything (longer the first time, as the centos box is downloaded)
 
 The Network is bridged, and presumes existence of "wlan2", if that does not exist then vagrant will prompt to ask which adapter it should use.
+
+### Usage - Docker:
+
+1. Install docker
+2. Clone this repository, e.g. git clone https://github.com/pgleghorn/VagrantSites.git
+3. Edit runDockerBuild.sh and change the values of ORACLE_USER and ORACLE_PASSWORD to provide your own.
+4. Edit config.sh and change required params
+5. Build the docker image with:  ./buildDockerImage.sh
+6. Run the container with:  docker -p9191:9191 run vs
+
+To reach Sites you will need to add a local hosts mapping to point value of $V_HOSTNAME (e.g. v50) to localhost.
+Since Sites needs to know at install-time which host:port it lives at, using docker port mapping to set a different port will not work, Sites will redirect to the port it knows.
 
 ### Todo
 
@@ -52,5 +67,9 @@ The Network is bridged, and presumes existence of "wlan2", if that does not exis
 * psi-probe
 * ~~dont require cygwin/linux~~
 * proper xml file editing (eg augeas) not sed
-
-
+* dont bake oracle credentials into the docker image history
+* vagrantfile should be able to downloads kits also
+* test on more host platforms
+* expand to include sites12c
+* split dockerfile into multiple images (base download of kits, vs install/configure)
+* allow config.sh for internal host:port and external host:port, which then facilitates proper docker port mapping at runtime

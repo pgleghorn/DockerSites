@@ -7,7 +7,7 @@ echo "***"
 echo ""
 
 # unpack
-unzip -q -jd /tmp /kits/V38958-01.zip WebCenterSites_11.1.1.8.0/WCS_Sites/WCS_Sites.zip
+unzip -q -jd /tmp /kits/ofm_sites_generic_11.1.1.8.0_disk1_1of1.zip WebCenterSites_11.1.1.8.0/WCS_Sites/WCS_Sites.zip
 cd /tmp
 unzip -q WCS_Sites.zip
 cd Sites
@@ -56,7 +56,6 @@ ENDSILENTCONFIG
 
 # installer.ini changes for silent install
 sed -i 's/nodisplay=false/nodisplay=true/' install.ini
-#sed -i 's/loadfile=/loadfile=\/home\/phil\/oracle\/webcenter\/sites\/ominstallinfo\/silentconfig.ini/' install.ini
 sed -i '/^loadfile=/d' install.ini
 echo "loadfile=$V_SITES_INSTALLDIR/ominstallinfo/silentconfig.ini" >> install.ini
 
