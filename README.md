@@ -3,8 +3,9 @@ This repo provides two methods (Vagrant and Docker) to perform a fully unattende
 
 Both methods produce an Oracle WebCenter Sites 11.1.1.8.0 patch 11 single server development installation with cas, AviSports sample site, and optionally support tools 4.3. It uses java 1.8, tomcat 7 and hsqldb 1.8, on centos 6.6.
 
-The Vagrant method uses a virtualbox provider, and shell provisioner scripts to do the installation work.
-The Docker method uses exactly the same underlying scripts to perform the installation.
+The Vagrant method uses a virtualbox provider and shell provisioner scripts to do the installation work. It requires the kits (sites, tomcat, etc) to be downloaded in advance to a local disk which are then made available to the virtualbox in the /kits directory.
+
+The Docker method uses exactly the same underlying scripts to perform the installation. It does not require any kits to be downloaded, instead it downloads them automatically, using Oracle website credentials to download the Sites kit.
 
 *These scripts are not an official Oracle product, and the stack they produce is not supported (centos, hsqldb).*
 
