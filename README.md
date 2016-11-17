@@ -19,7 +19,7 @@ The Docker method uses exactly the same underlying scripts to perform the instal
   * hsqldb_1_8_0_10.zip
   * ofm_sites_generic_11.1.1.8.0_disk1_1of1.zip (webcenter sites 11.1.1.8.0 kit from OTN)
   * p21494888_111180_Generic.zip (webcenter sites 11.1.1.8.0 patch 11 kit from oracle support)
-  * optional: SupportTools-4.3.zip (webcenter sites support tools 4.3 from oracle support)
+  * optional: p22093196_111180_Generic.zip (webcenter sites support tools 4.4 from oracle support)
 4. Clone this repository, e.g. git clone https://github.com/pgleghorn/VagrantSites.git
 5. Edit config.sh and change required params
  * set V_KITS_DIRECTORY to the directory from step 2

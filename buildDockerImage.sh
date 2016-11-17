@@ -1,1 +1,1 @@
-docker build -t vs --build-arg ORACLE_USER=user@company.com --build-arg ORACLE_PASSWORD=password .
+docker build --build-arg "ORACLE_USER=xxx" --build-arg "ORACLE_PASSWORD=yyy" -t vs $@ .

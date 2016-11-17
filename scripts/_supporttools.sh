@@ -7,7 +7,7 @@ echo "***"
 echo ""
 
 # unpack
-unzip -q -d /tmp/supporttools /kits/SupportTools-4.3.zip
+unzip -q -d /tmp/supporttools /kits/p22093196_111180_Generic.zip
 chown -R $V_UNIXUSER:$V_UNIXGROUP /tmp/supporttools
 
 # run
