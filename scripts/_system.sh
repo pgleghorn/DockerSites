@@ -1,10 +1,6 @@
 #!/bin/sh
 
-echo ""
-echo "***"
-echo "*** setup system"
-echo "***"
-echo ""
+echo "\n***\n*** setup system \n***\n\n"
 
 hostname $V_HOSTNAME
 ipaddr=$V_IP_ADDRESS

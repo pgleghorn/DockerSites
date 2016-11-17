@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/sh
 
 yum -y install openldap-servers
 yum -y install openldap-clients

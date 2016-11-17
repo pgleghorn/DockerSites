@@ -1,6 +1,5 @@
-#!/bin/sh
+#!/bin/sh -ax
 
-set -ax
 . /vagrant/config.sh
 /vagrant/scripts/_system.sh
 /vagrant/scripts/_java.sh
@@ -8,7 +7,7 @@ set -ax
 /vagrant/scripts/_hsqldb.sh
 /vagrant/scripts/_sites.sh
 [ -f /kits/p22093196_111180_Generic.zip ] && /vagrant/scripts/_supporttools.sh
-#/vagrant/scripts/patch11/install.sh
+/vagrant/scripts/patch11/install.sh
 /vagrant/scripts/_tweaks.sh
 /vagrant/scripts/_cleanup.sh
 #/vagrant/scripts/_end.sh

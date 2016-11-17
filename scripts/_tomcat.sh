@@ -1,10 +1,6 @@
 #!/bin/sh
 
-echo ""
-echo "***"
-echo "*** setup tomcat"
-echo "***"
-echo ""
+echo "\n***\n*** setup tomcat \n***\n\n"
 
 # unpack
 cd /tmp

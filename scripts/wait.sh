@@ -1,4 +1,4 @@
-#!/bin/sh 
+#!/bin/sh
 
 # wait until sites install log asks us to restart tomcat
 TARGET="^4. If the test is successful, press ENTER.$"

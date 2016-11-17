@@ -1,10 +1,6 @@
-#!/bin/sh
+#!/bin/sh -x
 
-echo ""
-echo "***"
-echo "*** patch 11"
-echo "***"
-echo ""
+echo "\n***\n*** install patch11 \n***\n\n"
 
 mkdir /tmp/p11
 cd /tmp/p11

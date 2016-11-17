@@ -1,10 +1,6 @@
 #!/bin/sh
 
-echo ""
-echo "***"
-echo "*** install finished"
-echo "***"
-echo ""
+echo "\n***\n*** install finished \n***\n\n"
 
 #cat /etc/hosts
 #ps -fu $V_UNIXUSER | grep java

@@ -1,10 +1,6 @@
 #!/bin/sh
 
-echo ""
-echo "***"
-echo "*** tweaks"
-echo "***"
-echo ""
+echo "\n***\n*** tweaks \n***\n\n"
 
 # sites config
 sed -i 's/cs.timeout=.*/cs.timeout=18000/' $V_SITES_INSTALLDIR/futuretense.ini

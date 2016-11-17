@@ -1,0 +1,6 @@
+FROM vsbase:latest
+MAINTAINER pgleghorn@gmail.com
+# install everything
+RUN /vagrant/scripts/install.sh; rm -rf /kits/*
+USER oracle
+CMD bash -l -c "/u00/tomcat/bin/catalina.sh run"
