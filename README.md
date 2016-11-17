@@ -1,7 +1,7 @@
 # VagrantSites
 This repo provides two methods (Vagrant and Docker) to perform a fully unattended installation of Oracle WebCenter Sites including OS, application server, DB, Sites and patches.
 
-Both methods produce an Oracle WebCenter Sites 11.1.1.8.0 patch 11 single server development installation with cas, AviSports sample site, and optionally support tools 4.3. It uses java 1.8, tomcat 7 and hsqldb 1.8, on centos 6.6.
+Both methods produce an Oracle WebCenter Sites 11.1.1.8.0 patch 11 single server development installation with cas, AviSports sample site, and optionally support tools 4.4. It uses java 1.7, tomcat 7 and hsqldb 1.8, on centos 6.
 
 The Vagrant method uses a virtualbox provider and shell provisioner scripts to do the installation work. It requires the kits (sites, tomcat, etc) to be downloaded in advance to a local disk which are then made available to the virtualbox in the /kits directory.
 
@@ -36,10 +36,10 @@ The Network is bridged, and presumes existence of "wlan2", if that does not exis
 
 1. Install docker
 2. Clone this repository, e.g. git clone https://github.com/pgleghorn/VagrantSites.git
-3. Edit runDockerBuild.sh and change the values of ORACLE_USER and ORACLE_PASSWORD to provide your own.
+3. set environment variables ORACLE_USER=<your_oracle_username> and ORACLE_PASSWORD=<your_oracle_password>.
 4. Edit config.sh and change required params
-5. Build the docker image with:  ./buildDockerImage.sh
-6. Run the container with:  docker -p9191:9191 run vs
+5. Build the docker image with: ./buildDockerImage.sh
+6. Run the container with: ./runDocker.sh
 
 To reach Sites you will need to add a local hosts mapping to point value of $V_HOSTNAME (e.g. v50) to localhost.
 Since Sites needs to know at install-time which host:port it lives at, using docker port mapping to set a different port will not work, Sites will redirect to the port it knows.
