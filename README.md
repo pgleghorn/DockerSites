@@ -1,4 +1,4 @@
-# VagrantSites
+# VagrantDockerSites
 This repo provides two methods (Vagrant and Docker) to perform a fully unattended installation of Oracle WebCenter Sites including OS, application server, DB, Sites and patches.
 
 Both methods produce an Oracle WebCenter Sites 11.1.1.8.0 patch 11 single server development installation with cas, AviSports sample site, and optionally support tools 4.4. It uses java 1.7, tomcat 7 and hsqldb 1.8, on centos 6.
