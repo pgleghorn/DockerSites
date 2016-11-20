@@ -1,7 +1,6 @@
 #!/bin/sh -x
 
-echo "\n***\n*** install patch11 \n***\n\n"
-
+echo patch11
 mkdir /tmp/p11
 cd /tmp/p11
 unzip -q -d . /kits/p21494888_111180_Generic.zip

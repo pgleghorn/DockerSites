@@ -4,9 +4,8 @@ ARG ORACLE_USER
 ARG ORACLE_PASSWORD
 # comment
 RUN yum -y install wget unzip sudo
-RUN mkdir -p /vagrant
-COPY config.sh /vagrant
-COPY scripts /vagrant/scripts
+RUN mkdir -p /vagrant/scripts
+COPY scripts/download.sh /vagrant/scripts
 # grab kits
 RUN mkdir -p /kits
 WORKDIR /kits

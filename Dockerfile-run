@@ -1,0 +1,5 @@
+FROM vsinstall:latest
+MAINTAINER pgleghorn@gmail.com
+# refresh the scripts
+COPY scripts /vagrant/scripts
+CMD /bin/bash -l

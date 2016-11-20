@@ -1,7 +1,8 @@
 #!/bin/sh
 
-echo "\n***\n*** support tools \n***\n\n"
+[ ! -f /kits/p22093196_111180_Generic.zip ] && exit
 
+echo supporttools
 # unpack
 unzip -q -d /tmp/supporttools /kits/p22093196_111180_Generic.zip
 chown -R $V_UNIXUSER:$V_UNIXGROUP /tmp/supporttools

@@ -5,7 +5,7 @@ Both methods produce an Oracle WebCenter Sites 11.1.1.8.0 patch 11 single server
 
 The Vagrant method uses a virtualbox provider and shell provisioner scripts to do the installation work. It requires the kits (sites, tomcat, etc) to be downloaded in advance to a local disk which are then made available to the virtualbox in the /kits directory.
 
-The Docker method uses exactly the same underlying scripts to perform the installation. It does not require any kits to be downloaded, instead it downloads them automatically, using Oracle website credentials to download the Sites kit.
+The Docker method uses exactly the same underlying scripts to perform the installation. It does not require any kits to be downloaded, instead it downloads them automatically, using Oracle website credentials to download the Sites kit. Additionally the docker method allows startup of multiple simultaneous containers, e.g. editorial and delivery, defined in docker-compose.yml.
 
 *These scripts are not an official Oracle product, and the stack they produce is not supported (centos, hsqldb).*
 
@@ -34,15 +34,15 @@ The Network is bridged, and presumes existence of "wlan2", if that does not exis
 
 ### Usage - Docker:
 
-1. Install docker
+1. Install docker and docker-compose
 2. Clone this repository, e.g. git clone https://github.com/pgleghorn/VagrantSites.git
-3. Edit runDockerBuild.sh and change the values of ORACLE_USER and ORACLE_PASSWORD to provide your own.
-4. Edit config.sh and change required params
-5. Build the docker image with:  ./buildDockerImage.sh
-6. Run the container with:  docker -p9191:9191 run vs
+3. Set environment variables ORACLE_USER and ORACLE_PASSWORD with your oracle credentials.
+4. Edit config.sh and change any required params
+5. Build the docker images with:  ./buildDockerImage.sh
+6. Edit docker-compose.yml and define the instances to startup (e.g. editorial:5001, and delivery:5002)
+6. Startup with: docker-compose up
 
-To reach Sites you will need to add a local hosts mapping to point value of $V_HOSTNAME (e.g. v50) to localhost.
-Since Sites needs to know at install-time which host:port it lives at, using docker port mapping to set a different port will not work, Sites will redirect to the port it knows.
+To reach Sites you will need to add a local hosts mapping to point to the hostname(s) selected in docker-compose.yml. Note that since Sites needs to know at install-time which host:port it lives at, using docker port mapping to set a different host vs container port will not work, Sites will redirect the user to the port it knows about.
 
 ### Todo
 
@@ -72,5 +72,8 @@ Since Sites needs to know at install-time which host:port it lives at, using doc
 * vagrantfile should be able to downloads kits also
 * test on more host platforms
 * expand to include sites12c
-* split dockerfile into multiple images (base download of kits, vs install/configure)
-* allow config.sh for internal host:port and external host:port, which then facilitates proper docker port mapping at runtime
+* ~~split dockerfile into multiple images (base download of kits, vs install/configure)~~
+* some way to facilitate proper docker port mapping at runtime
+* ~~docker-compose for startup~~
+* ~~multiple simultaneous containers~~
+* ~~set host:port dynamic on first startup, startupDynamic.sh~~

@@ -1,7 +1,6 @@
 #!/bin/sh
 
-echo "\n***\n*** unpack java \n***\n\n"
-
+echo java
 cd /tmp
 echo "export JAVA_HOME=$V_JDK_INSTALLDIR" >> $V_UNIXUSERHOME/.bash_profile
 echo "PATH=$V_JDK_INSTALLDIR/bin:\$PATH" >> $V_UNIXUSERHOME/.bash_profile

@@ -1,7 +1,6 @@
 #!/bin/sh
 
-echo "\n***\n*** setup tomcat \n***\n\n"
-
+echo tomcat
 # unpack
 cd /tmp
 gunzip < /kits/apache-tomcat-7.0.62.tar.gz | tar xf -
