@@ -4,6 +4,8 @@ editorial:
   ports:
     - "5001:5001"
   command: bash -l -c "/vagrant/scripts/startupDynamic.sh editorial 5001"
+  links:
+    - delivery
 delivery:
   image: vsrun
   hostname: delivery
