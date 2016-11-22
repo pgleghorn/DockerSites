@@ -1,5 +1,5 @@
-FROM vsinstall:latest
+FROM vspatch:latest
 MAINTAINER pgleghorn@gmail.com
 # refresh the scripts
 COPY scripts /vagrant/scripts
-CMD /bin/bash -l
+CMD bash -l -c "catalina.sh run"

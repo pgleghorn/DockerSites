@@ -15,3 +15,4 @@ RUN /vagrant/scripts/download.sh ${ORACLE_USER} ${ORACLE_PASSWORD} "http://downl
 RUN wget --progress=dot:mega -O apache-tomcat-7.0.62.tar.gz http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.62/bin/apache-tomcat-7.0.62.tar.gz
 RUN wget --progress=dot:mega -O hsqldb_1_8_0_10.zip http://downloads.sourceforge.net/project/hsqldb/hsqldb/hsqldb_1_8_0/hsqldb_1_8_0_10.zip
 RUN wget --progress=dot:mega -O p22093196_111180_Generic.zip https://raw.githubusercontent.com/pgleghorn/kits/master/p22093196_111180_Generic.zip
+CMD /bin/bash -l

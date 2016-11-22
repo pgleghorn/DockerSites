@@ -10,9 +10,10 @@ for i in $FILE_EXTENSIONS; do
 	files=`find $DIR -type f -iname "*.$i" -print0 | xargs -0 grep $FIND | grep -v filedata | cut -f1 -d":" | sort | uniq`
 	for j in $files; do
 		echo "  found file $j"
-                grep $FIND $j | sed -e 's/^/    /g'
-		sed -i -e "s/$FIND/$REPLACE/g" $j
-		grep $REPLACE $j | sed -e 's/^/    /g'
+                /vagrant/scripts/diffsed "s/$FIND/$REPLACE/g" $j | sed -e 's/^/    /g'
+#                grep $FIND $j | sed -e 's/^/    /g'
+#		sed -i -e "s/$FIND/$REPLACE/g" $j
+#		grep $REPLACE $j | sed -e 's/^/    /g'
 	done
 done
 

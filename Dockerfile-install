@@ -1,10 +1,11 @@
 FROM vsbase:latest
 MAINTAINER pgleghorn@gmail.com
-# install everything
-RUN mkdir -p /vagrant
+# refresh scripts
 COPY config.sh /vagrant
 COPY scripts /vagrant/scripts
-RUN /vagrant/scripts/install.sh; rm -rf /kits/*
+# install sites
+RUN /vagrant/scripts/install.sh
 USER oracle
+CMD /bin/bash -l
 #CMD bash -l -c "/u00/tomcat/bin/catalina.sh run"
-CMD bash -l -c "/vagrant/scripts/startupDynamic.sh"
+#CMD bash -l -c "/vagrant/scripts/startupDynamic.sh"

@@ -1,6 +1,8 @@
 # sites params
-V_HOSTNAME=v50
-V_PORT=9191
+#V_HOSTNAME=v50
+#V_PORT=9191
+V_HOSTNAME=localhost
+V_PORT=8080
 
 V_UNIXUSER=oracle
 V_UNIXGROUP=oracle

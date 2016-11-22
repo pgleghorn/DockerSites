@@ -13,7 +13,7 @@ chown -R $V_UNIXUSER:$V_UNIXGROUP $V_TOMCAT_INSTALLDIR
 echo "PATH=$V_TOMCAT_INSTALLDIR/bin:\$PATH" >> $V_UNIXUSERHOME/.bash_profile
 echo "CATALINA_PID=$V_TOMCAT_INSTALLDIR/catalina.pid" >> $V_TOMCAT_INSTALLDIR/bin/setenv.sh
 echo "CLASSPATH=$V_SITES_INSTALLDIR/bin" >> $V_TOMCAT_INSTALLDIR/bin/setenv.sh
-echo 'JAVA_OPTS=" -Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8 -Xmx512m -XX:MaxPermSize=256m -Dnet.sf.ehcache.enableShutdownHook=true "' >> $V_TOMCAT_INSTALLDIR/bin/setenv.sh
+echo 'JAVA_OPTS=" -Djava.security.egd=file:/dev/./urandom -Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8 -Xmx512m -XX:MaxPermSize=256m -Dnet.sf.ehcache.enableShutdownHook=true "' >> $V_TOMCAT_INSTALLDIR/bin/setenv.sh
 
 # tomcat gui user
 sed -i '36i\

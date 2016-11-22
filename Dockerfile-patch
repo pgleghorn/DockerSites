@@ -1,0 +1,7 @@
+FROM vsinstall:latest
+MAINTAINER pgleghorn@gmail.com
+# refresh scripts
+COPY scripts /vagrant/scripts
+# install patch
+RUN /vagrant/scripts/patch11/install.sh
+CMD /bin/bash -l
