@@ -67,7 +67,7 @@ To reach Sites you will need to add a local hosts mapping to point to the hostna
 * analytics
 * psi-probe
 * ~~dont require cygwin/linux~~
-* proper xml file editing (eg augeas) not sed
+* ~~proper xml file editing (eg augeas) not sed~~
 * dont bake oracle credentials into the docker image history
 * vagrantfile should be able to downloads kits also
 * test on more host platforms
