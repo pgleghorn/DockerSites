@@ -54,18 +54,10 @@ sed -i 's/nodisplay=false/nodisplay=true/' install.ini
 sed -i '/^loadfile=/d' install.ini
 echo "loadfile=$V_SITES_INSTALLDIR/ominstallinfo/silentconfig.ini" >> install.ini
 
-# shared dir
-mkdir -p $V_SITES_SHAREDDIR
-
-# chown
-chown -R $V_UNIXUSER:$V_UNIXGROUP $V_SITES_INSTALLDIR
-chown -R $V_UNIXUSER:$V_UNIXGROUP $V_SITES_SHAREDDIR
-
 # run
-sudo -i -u $V_UNIXUSER sh -c "set -a; . /vagrant/config.sh; cd /tmp/Sites; /vagrant/scripts/wait.sh | ./csInstall.sh -silent"
+( cd /tmp/Sites; /vagrant/scripts/wait.sh | ./csInstall.sh -silent )
 
 # fix esapi loading
-mkdir $V_UNIXUSERHOME/esapi
+mkdir -p $V_UNIXUSERHOME/esapi
 cp $V_SITES_INSTALLDIR/bin/ESAPI.properties $V_UNIXUSERHOME/esapi
 cp $V_SITES_INSTALLDIR/bin/validation.properties $V_UNIXUSERHOME/esapi
-

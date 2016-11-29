@@ -1,0 +1,7 @@
+<Context path="/cs" docBase="cs" reloadable="true" crossContext="true">
+  <Resource name="csDataSource" auth="Container" type="javax.sql.DataSource"
+  maxActive="50" maxIdle="10" username="sa" password=""
+  driverClassName="org.hsqldb.jdbcDriver"
+  url="jdbc:hsqldb:/tmp/hsqldb/csdb"/>
+</Context>
+

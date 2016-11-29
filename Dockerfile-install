@@ -5,7 +5,4 @@ COPY config.sh /vagrant
 COPY scripts /vagrant/scripts
 # install sites
 RUN /vagrant/scripts/install.sh
-USER oracle
 CMD /bin/bash -l
-#CMD bash -l -c "/u00/tomcat/bin/catalina.sh run"
-#CMD bash -l -c "/vagrant/scripts/startupDynamic.sh"

@@ -1,6 +1,4 @@
 # sites params
-#V_HOSTNAME=v50
-#V_PORT=9191
 V_HOSTNAME=localhost
 V_PORT=8080
 

@@ -1,0 +1,5 @@
+<!-- begin add tomcat user -->
+<role rolename="manager-gui"/> 
+<role rolename="admin-gui"/> 
+<user username="tomcat" password="pass1234" roles="manager-gui,admin-gui"/>
+<!-- end add tomcat user -->
