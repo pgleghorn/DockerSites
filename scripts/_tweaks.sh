@@ -1,6 +1,8 @@
 #!/bin/sh
 
 echo tweaks
+sleep 5
+
 # sites config
 sed -i 's/cs.timeout=.*/cs.timeout=18000/' $V_SITES_INSTALLDIR/futuretense.ini
 sed -i 's/advancedUI.enableAssetForms=false/advancedUI.enableAssetForms=true/' $V_SITES_INSTALLDIR/futuretense_xcel.ini

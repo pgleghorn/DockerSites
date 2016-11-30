@@ -1,6 +1,7 @@
 #!/bin/sh -a
 
 echo java
+sleep 5
 
 # unpack
 cd /tmp

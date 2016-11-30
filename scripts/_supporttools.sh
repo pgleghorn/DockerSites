@@ -3,6 +3,8 @@
 [ ! -f /kits/p22093196_111180_Generic.zip ] && exit
 
 echo supporttools
+sleep 5
+
 # unpack
 unzip -q -d /tmp/supporttools /kits/p22093196_111180_Generic.zip
 

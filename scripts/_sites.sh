@@ -1,6 +1,8 @@
 #!/bin/sh
 
 echo sites
+sleep 5
+
 # unpack
 unzip -q -jd /tmp /kits/ofm_sites_generic_11.1.1.8.0_disk1_1of1.zip WebCenterSites_11.1.1.8.0/WCS_Sites/WCS_Sites.zip
 cd /tmp

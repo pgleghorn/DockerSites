@@ -23,7 +23,7 @@ case $PLACE in
 esac
 
 # load the xml and put in the fragment placeholder
-augtool --echo  --noautoload --root $inputfiledir <<EOF
+augtool --noautoload --root $inputfiledir <<EOF
 set /augeas/load/xml/lens "Xml.lns"
 set /augeas/load/xml/incl $inputfilename
 load

@@ -1,6 +1,8 @@
 #!/bin/sh
 
 echo tomcat
+sleep 5
+
 # unpack
 cd /tmp
 gunzip < /kits/apache-tomcat-7.0.62.tar.gz | tar xf -
