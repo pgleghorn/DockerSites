@@ -3,7 +3,6 @@ MAINTAINER pgleghorn@gmail.com
 ARG ORACLE_USER
 ARG ORACLE_PASSWORD
 # comment
-#RUN yum -y install wget unzip sudo augtool augeas-tools augeas-tool
 RUN yum -y install wget unzip sudo augeas
 # refresh scripts
 RUN mkdir -p /vagrant/scripts
