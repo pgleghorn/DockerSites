@@ -12,6 +12,9 @@ V_TOMCAT_INSTALLDIR=$V_INSTALLDIR/tomcat
 V_JDK_INSTALLDIR=$V_INSTALLDIR/jdk
 V_SITES_PATCHLEVEL=patch11
 
+V_CONFIG=/vagrant/config.sh
+V_SCRIPTS=/vagrant/scripts
+
 # vagrant params
 VAGRANT_LOG=info
 VAGRANT_LOGFILE=vagrant.log

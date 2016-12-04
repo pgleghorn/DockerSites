@@ -1,7 +1,10 @@
 FROM vsinstall:latest
 MAINTAINER pgleghorn@gmail.com
+ARG V_SCRIPTS
+ARG V_CONFIG
 # refresh scripts
-COPY scripts /vagrant/scripts
+COPY config $V_CONFIG
+COPY scripts $V_SCRIPTS
 # install patch
-RUN /vagrant/scripts/patch11/install.sh
+RUN $V_SCRIPTS/patch11/install.sh
 CMD /bin/bash -l

@@ -1,13 +1,20 @@
 #!/bin/sh -a
 
-. /vagrant/config.sh
-/vagrant/scripts/_java.sh
-/vagrant/scripts/_tomcat.sh
-/vagrant/scripts/_hsqldb.sh
+. $V_CONFIG
+cat $V_UNIXUSERHOME/.bash_profile
+echo "Adding $V_SCRIPTS to PATH"
+echo "export PATH=$V_SCRIPTS:\$PATH" >> $V_UNIXUSERHOME/.bash_profile
+cat $V_UNIXUSERHOME/.bash_profile
 
 . $V_UNIXUSERHOME/.bash_profile
 
-/vagrant/scripts/_sites.sh
-/vagrant/scripts/_supporttools.sh
-/vagrant/scripts/_tweaks.sh
-/vagrant/scripts/_cleanup.sh
+$V_SCRIPTS/_java.sh
+$V_SCRIPTS/_tomcat.sh
+$V_SCRIPTS/_hsqldb.sh
+
+. $V_UNIXUSERHOME/.bash_profile
+
+$V_SCRIPTS/_sites.sh
+$V_SCRIPTS/_supporttools.sh
+$V_SCRIPTS/_tweaks.sh
+$V_SCRIPTS/_cleanup.sh

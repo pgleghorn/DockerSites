@@ -1,6 +1,6 @@
 #!/bin/sh -a
 
-. /vagrant/config.sh
+. $V_CONFIG
 . $HOME/.bash_profile
 echo patch11
 sleep 5
@@ -28,27 +28,27 @@ cp -r cas_upgrade/config/cas/* $V_SITES_INSTALLDIR/bin
 bindir=$V_SITES_INSTALLDIR/bin
 for i in $bindir/cas.properties $bindir/customBeans.xml $bindir/deployerConfigContext.xml $bindir/host.properties $bindir/jbossTicketCacheReplicationConfig.xml $bindir/log4j.xml $bindir/cas-spring-configuration/customDefaultWEMSSObeans.xml; do
   echo correcting cas configuration in $i
-  /vagrant/scripts/diffwrap.sh $i sed -i \"s/@CSConnectPrefix@/http/g\" $i
-  /vagrant/scripts/diffwrap.sh $i sed -i \"s/@hostname@/$V_HOSTNAME/g\" $i
-  /vagrant/scripts/diffwrap.sh $i sed -i \"s/@portnumber@/$V_PORT/g\" $i
-  /vagrant/scripts/diffwrap.sh $i sed -i \"s/@context-path@/cs/g\" $i
-  /vagrant/scripts/diffwrap.sh $i sed -i \"s/@unique_id@/$V_HOSTNAME-$V_PORT-uniqueid/g\" $i
-  /vagrant/scripts/diffwrap.sh $i sed -i \"s/@CASHostNameActual@/$V_HOSTNAME/g\" $i
-  /vagrant/scripts/diffwrap.sh $i sed -i \"s/@cas.log@/\\/tmp\\/cas.log/g\" $i
+  diffwrap.sh $i sed -i \"s/@CSConnectPrefix@/http/g\" $i
+  diffwrap.sh $i sed -i \"s/@hostname@/$V_HOSTNAME/g\" $i
+  diffwrap.sh $i sed -i \"s/@portnumber@/$V_PORT/g\" $i
+  diffwrap.sh $i sed -i \"s/@context-path@/cs/g\" $i
+  diffwrap.sh $i sed -i \"s/@unique_id@/$V_HOSTNAME-$V_PORT-uniqueid/g\" $i
+  diffwrap.sh $i sed -i \"s/@CASHostNameActual@/$V_HOSTNAME/g\" $i
+  diffwrap.sh $i sed -i \"s/@cas.log@/\\/tmp\\/cas.log/g\" $i
 done
 
 # 5 cas jboss cluster
 f=$V_SITES_INSTALLDIR/bin/jbossTicketCacheReplicationConfig.xml
-/vagrant/scripts/diffwrap.sh $f sed -i \"s/48866/45678/g\" $f
-/vagrant/scripts/diffwrap.sh $f sed -i \"s/TreeCache-Cluster/$V_HOSTNAME-TreeCache-Cluster/g\" $f
+diffwrap.sh $f sed -i \"s/48866/45678/g\" $f
+diffwrap.sh $f sed -i \"s/TreeCache-Cluster/$V_HOSTNAME-TreeCache-Cluster/g\" $f
 
 # 6 sites webapp
 cp -r sites_webapp/* $V_TOMCAT_INSTALLDIR/webapps/cs
 
 # 7 sites satellite.properties
 f=$V_TOMCAT_INSTALLDIR/webapps/cs/WEB-INF/classes/satellite.properties
-/vagrant/scripts/diffwrap.sh $f sed -i \"/^transparent.content-type.pattern=/d\" $f
-/vagrant/scripts/diffwrap.sh $f "echo 'transparent.content-type.pattern=text/.*|.*xml(?!formats).*' >> $f"
+diffwrap.sh $f sed -i \"/^transparent.content-type.pattern=/d\" $f
+diffwrap.sh $f "echo 'transparent.content-type.pattern=text/.*|.*xml(?!formats).*' >> $f"
 
 # 8 rss webapp
 
@@ -61,8 +61,8 @@ cp -r sites_install/* $V_SITES_INSTALLDIR
 
 # 12 assetpublishcallback & dataunpacker
 f=$V_TOMCAT_INSTALLDIR/webapps/cs/WEB-INF/classes/AdvPub.xml
-/vagrant/scripts/diffwrap.sh $f /vagrant/scripts/xmlput.sh $f /vagrant/scripts/patch11/fragments/assetpublishcallback.xml before //bean[1]
-/vagrant/scripts/xmlput.sh $f /vagrant/scripts/patch11/fragments/dataunpacker.xml before //bean[#attribute/id=\"DataUnpacker\"]/property[1]
+diffwrap.sh $f xmlput.sh $f $V_SCRIPTS/patch11/fragments/assetpublishcallback.xml before //bean[1]
+xmlput.sh $f $V_SCRIPTS/patch11/fragments/dataunpacker.xml before //bean[#attribute/id=\"DataUnpacker\"]/property[1]
 
 # 13 remove old jars
 for i in $V_SITES_INSTALLDIR/Sun/lib $V_SITES_INSTALLDIR/Sun/jws/common/lib $V_TOMCAT_INSTALLDIR/webapps/cs/WEB-INF/lib $V_TOMCAT_INSTALLDIR/webapps/cas/WEB-INF/lib; do
@@ -83,28 +83,28 @@ rm -f $V_TOMCAT_INSTALLDIR/webapps/cs/WEB-INF/lib/commons-fileupload-1.2.1.jar
 
 # 16 NoAccess, place it after the welcome-file-list element
 f=$V_TOMCAT_INSTALLDIR/webapps/cs/WEB-INF/web.xml
-/vagrant/scripts/diffwrap.sh $f /vagrant/scripts/xmlput.sh $f /vagrant/scripts/patch11/fragments/noaccess.xml after //welcome-file-list
+diffwrap.sh $f xmlput.sh $f $V_SCRIPTS/patch11/fragments/noaccess.xml after //welcome-file-list
 f=$V_TOMCAT_INSTALLDIR/webapps/cas/WEB-INF/web.xml
-/vagrant/scripts/diffwrap.sh $f /vagrant/scripts/xmlput.sh $f /vagrant/scripts/patch11/fragments/noaccess.xml after //welcome-file-list
+diffwrap.sh $f xmlput.sh $f $V_SCRIPTS/patch11/fragments/noaccess.xml after //welcome-file-list
 
 # 17 ContentSecurityFilter, place the filter as the first filter after the error-page element, and put the filter-mapping after the first filter-mapping
 # first cs
 f=$V_TOMCAT_INSTALLDIR/webapps/cs/WEB-INF/web.xml
-/vagrant/scripts/diffwrap.sh $f /vagrant/scripts/xmlput.sh $f /vagrant/scripts/patch11/fragments/contentsecurityfilter.xml before //filter[1]
-/vagrant/scripts/diffwrap.sh $f /vagrant/scripts/xmlput.sh $f /vagrant/scripts/patch11/fragments/contentsecurityfiltermapping.xml before //filter-mapping[1]
+diffwrap.sh $f xmlput.sh $f $V_SCRIPTS/patch11/fragments/contentsecurityfilter.xml before //filter[1]
+diffwrap.sh $f xmlput.sh $f $V_SCRIPTS/patch11/fragments/contentsecurityfiltermapping.xml before //filter-mapping[1]
 # then cas
 f=$V_TOMCAT_INSTALLDIR/webapps/cas/WEB-INF/web.xml
-/vagrant/scripts/diffwrap.sh $f /vagrant/scripts/xmlput.sh $f /vagrant/scripts/patch11/fragments/contentsecurityfilter.xml before //filter[1]
-/vagrant/scripts/diffwrap.sh $f /vagrant/scripts/xmlput.sh $f /vagrant/scripts/patch11/fragments/contentsecurityfiltermapping.xml before //filter-mapping[1]
+diffwrap.sh $f xmlput.sh $f $V_SCRIPTS/patch11/fragments/contentsecurityfilter.xml before //filter[1]
+diffwrap.sh $f xmlput.sh $f $V_SCRIPTS/patch11/fragments/contentsecurityfiltermapping.xml before //filter-mapping[1]
 
 # 18 eloqua filter, place the filter as the first filter after the error-page element, and put the filter-mapping after the first filter-mapping
 f=$V_TOMCAT_INSTALLDIR/webapps/cs/WEB-INF/web.xml
-/vagrant/scripts/diffwrap.sh $f /vagrant/scripts/xmlput.sh $f /vagrant/scripts/patch11/fragments/eloquafilter.xml before //filter[1]
-/vagrant/scripts/diffwrap.sh $f /vagrant/scripts/xmlput.sh $f /vagrant/scripts/patch11/fragments/eloquafiltermapping.xml before //filter-mapping[1]
+diffwrap.sh $f xmlput.sh $f $V_SCRIPTS/patch11/fragments/eloquafilter.xml before //filter[1]
+diffwrap.sh $f xmlput.sh $f $V_SCRIPTS/patch11/fragments/eloquafiltermapping.xml before //filter-mapping[1]
 
 # 19 ckeditor bug
 f=$V_TOMCAT_INSTALLDIR/webapps/cs/ckeditor/config.js
-/vagrant/scripts/diffwrap.sh $f sed -i \"/config.fullPage/ r /vagrant/scripts/patch11/fragments/configprotectedsource.js\" $f
+diffwrap.sh $f sed -i \"/config.fullPage/ r $V_SCRIPTS/patch11/fragments/configprotectedsource.js\" $f
 
 # 20 ldap caseAware
 
@@ -112,18 +112,18 @@ f=$V_TOMCAT_INSTALLDIR/webapps/cs/ckeditor/config.js
 
 # 22 revisions
 f=$V_SITES_INSTALLDIR/futuretense.ini
-/vagrant/scripts/diffwrap.sh $f "echo 'cs.deleteExcessRevisionsFromDisk=true' >> $f"
+diffwrap.sh $f "echo 'cs.deleteExcessRevisionsFromDisk=true' >> $f"
 
 # 23 TODO email ssl/tls
 
 # 24 eloqua loggers
 f=$V_TOMCAT_INSTALLDIR/webapps/cs/WEB-INF/classes/log4j.properties
-/vagrant/scripts/diffwrap.sh $f "echo 'log4j.logger.oracle.wcsites.eloquaintegration=INFO' >> $f"
-/vagrant/scripts/diffwrap.sh $f "echo 'log4j.logger.oracle.wcsites.eloquaintegration.jsp=INFO' >> $f"
+diffwrap.sh $f "echo 'log4j.logger.oracle.wcsites.eloquaintegration=INFO' >> $f"
+diffwrap.sh $f "echo 'log4j.logger.oracle.wcsites.eloquaintegration.jsp=INFO' >> $f"
 
 # 25 youtube assets
 f=$V_SITES_INSTALLDIR/futuretense.ini
-/vagrant/scripts/diffwrap.sh $f "echo 'cs.youtubeapikey=provideYourOwnKey' >> $f"
+diffwrap.sh $f "echo 'cs.youtubeapikey=provideYourOwnKey' >> $f"
 
 # startup
 
@@ -141,7 +141,7 @@ java -cp "$V_TOMCAT_INSTALLDIR/webapps/cs/WEB-INF/lib/*:$V_TOMCAT_INSTALLDIR/lib
 
 # other, dojo tree
 f=$V_SITES_INSTALLDIR/futuretense_xcel.ini
-/vagrant/scripts/diffwrap.sh $f sed -i \"s/xcelerate.treeType=OMTree/xcelerate.treeType=DojoTree/g\" $f
+diffwrap.sh $f sed -i \"s/xcelerate.treeType=OMTree/xcelerate.treeType=DojoTree/g\" $f
 
 
 # shutdown

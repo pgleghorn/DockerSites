@@ -3,7 +3,7 @@ editorial:
   hostname: editorial
   ports:
     - "5001:5001"
-  command: bash -l -c "/vagrant/scripts/startupDynamic.sh editorial 5001"
+  command: bash -l -c "startupDynamic.sh editorial 5001"
   links:
     - delivery
 delivery:
@@ -11,4 +11,4 @@ delivery:
   hostname: delivery
   ports:
     - "5002:5002"
-  command: bash -l -c "/vagrant/scripts/startupDynamic.sh delivery 5002"
+  command: bash -l -c "startupDynamic.sh delivery 5002"

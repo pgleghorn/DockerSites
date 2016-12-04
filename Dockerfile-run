@@ -1,5 +1,9 @@
 FROM vspatch:latest
 MAINTAINER pgleghorn@gmail.com
+ARG V_SCRIPTS
+ARG V_CONFIG
 # refresh the scripts
-COPY scripts /vagrant/scripts
+COPY config.sh $V_CONFIG
+COPY scripts $V_SCRIPTS
+# run
 CMD bash -l -c "catalina.sh run"

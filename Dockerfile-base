@@ -2,22 +2,25 @@ FROM centos:6
 MAINTAINER pgleghorn@gmail.com
 ARG ORACLE_USER
 ARG ORACLE_PASSWORD
-# comment
-RUN yum -y install wget unzip sudo augeas
-# refresh scripts
-RUN mkdir -p /vagrant/scripts
-COPY config.sh /vagrant
-COPY scripts /vagrant/scripts
+ARG V_SCRIPTS
+ARG V_CONFIG
+# required packages
+RUN yum -y install wget unzip augeas
+# install scripts
+RUN mkdir -p $V_SCRIPTS
+COPY scripts $V_SCRIPTS
+COPY config.sh $V_CONFIG
 # grab kits
 RUN mkdir -p /kits
 WORKDIR /kits
-RUN /vagrant/scripts/download.sh ${ORACLE_USER} ${ORACLE_PASSWORD} "http://download.oracle.com/otn/nt/middleware/11g/111180/ofm_sites_generic_11.1.1.8.0_disk1_1of1.zip" ofm_sites_generic_11.1.1.8.0_disk1_1of1.zip
-RUN /vagrant/scripts/download.sh ${ORACLE_USER} ${ORACLE_PASSWORD} "https://updates.oracle.com/Orion/Services/download/p21494888_111180_Generic.zip?aru=19178783&patch_file=p21494888_111180_Generic.zip" p21494888_111180_Generic.zip
-RUN /vagrant/scripts/download.sh ${ORACLE_USER} ${ORACLE_PASSWORD} "http://download.oracle.com/otn-pub/java/jdk/7u79-b15/jdk-7u79-linux-x64.tar.gz" jdk-7u79-linux-x64.tar.gz
+RUN $V_SCRIPTS/download.sh ${ORACLE_USER} ${ORACLE_PASSWORD} "http://download.oracle.com/otn/nt/middleware/11g/111180/ofm_sites_generic_11.1.1.8.0_disk1_1of1.zip" ofm_sites_generic_11.1.1.8.0_disk1_1of1.zip
+RUN $V_SCRIPTS/download.sh ${ORACLE_USER} ${ORACLE_PASSWORD} "https://updates.oracle.com/Orion/Services/download/p21494888_111180_Generic.zip?aru=19178783&patch_file=p21494888_111180_Generic.zip" p21494888_111180_Generic.zip
+RUN $V_SCRIPTS/download.sh ${ORACLE_USER} ${ORACLE_PASSWORD} "http://download.oracle.com/otn-pub/java/jdk/7u79-b15/jdk-7u79-linux-x64.tar.gz" jdk-7u79-linux-x64.tar.gz
 RUN wget --progress=dot:mega -O apache-tomcat-7.0.62.tar.gz http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.62/bin/apache-tomcat-7.0.62.tar.gz
 RUN wget --progress=dot:mega -O hsqldb_1_8_0_10.zip http://downloads.sourceforge.net/project/hsqldb/hsqldb/hsqldb_1_8_0/hsqldb_1_8_0_10.zip
 RUN wget --progress=dot:mega -O p22093196_111180_Generic.zip https://raw.githubusercontent.com/pgleghorn/kits/master/p22093196_111180_Generic.zip
-RUN /vagrant/scripts/_system.sh
+# init system
+RUN $V_SCRIPTS/_system.sh
 USER oracle
 WORKDIR /home/oracle
 CMD /bin/bash -l

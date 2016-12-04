@@ -11,5 +11,5 @@ mv * $V_JDK_INSTALLDIR
 
 # profile
 f=$V_UNIXUSERHOME/.bash_profile
-/vagrant/scripts/diffwrap.sh $f "echo export JAVA_HOME=$V_JDK_INSTALLDIR >> $f"
-/vagrant/scripts/diffwrap.sh $f "echo export PATH='$'JAVA_HOME/bin:'$'PATH >> $f"
+$V_SCRIPTS/diffwrap.sh $f "echo export JAVA_HOME=$V_JDK_INSTALLDIR >> $f"
+$V_SCRIPTS/diffwrap.sh $f "echo export PATH='$'JAVA_HOME/bin:'$'PATH >> $f"

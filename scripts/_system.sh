@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/bin/sh -a
 
-set -a
-. /vagrant/config.sh
+. $V_CONFIG
 echo system
+
 hostname $V_HOSTNAME 2>/dev/null
 echo "127.0.0.1 $V_HOSTNAME" >> /etc/hosts
 chkconfig --level 345 iptables off 2>/dev/null

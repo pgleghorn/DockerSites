@@ -1,8 +1,10 @@
 FROM vsbase:latest
 MAINTAINER pgleghorn@gmail.com
+ARG V_SCRIPTS
+ARG V_CONFIG
 # refresh scripts
-COPY config.sh /vagrant
-COPY scripts /vagrant/scripts
+COPY config.sh $V_CONFIG
+COPY scripts $V_SCRIPTS
 # install sites
-RUN /vagrant/scripts/install.sh
+RUN $V_SCRIPTS/install.sh
 CMD /bin/bash -l
