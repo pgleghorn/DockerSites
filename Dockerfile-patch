@@ -3,7 +3,7 @@ MAINTAINER pgleghorn@gmail.com
 ARG V_SCRIPTS
 ARG V_CONFIG
 # refresh scripts
-COPY config $V_CONFIG
+COPY config.sh $V_CONFIG
 COPY scripts $V_SCRIPTS
 # install patch
 RUN $V_SCRIPTS/patch11/install.sh

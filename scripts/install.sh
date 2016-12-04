@@ -1,10 +1,8 @@
 #!/bin/sh -a
 
 . $V_CONFIG
-cat $V_UNIXUSERHOME/.bash_profile
 echo "Adding $V_SCRIPTS to PATH"
 echo "export PATH=$V_SCRIPTS:\$PATH" >> $V_UNIXUSERHOME/.bash_profile
-cat $V_UNIXUSERHOME/.bash_profile
 
 . $V_UNIXUSERHOME/.bash_profile
 
