@@ -6,5 +6,5 @@ ARG V_CONFIG
 COPY config.sh $V_CONFIG
 COPY scripts $V_SCRIPTS
 # install patch
-RUN $V_SCRIPTS/patch11/install.sh
+RUN $V_SCRIPTS/patch11/wcspatchinstall.sh
 CMD /bin/bash -l

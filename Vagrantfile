@@ -20,5 +20,5 @@ Vagrant.configure(2) do |config|
     vb.memory = ENV['V_VAGRANT_MEMORY']
     vb.gui = ENV['V_VAGRANT_GUI']
   end
-  config.vm.provision "shell", inline: "/vagrant/scripts/install.sh"
+  config.vm.provision "shell", inline: "/vagrant/scripts/wcsinstall.sh"
 end
