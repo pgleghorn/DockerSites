@@ -7,6 +7,8 @@ The Vagrant method uses a virtualbox provider and shell provisioner scripts to d
 
 The Docker method uses exactly the same underlying scripts to perform the installation. It does not require any kits to be downloaded, instead it downloads them automatically, using Oracle website credentials to download the Sites kit. Additionally the docker method allows startup of multiple simultaneous containers, e.g. editorial and delivery, defined in docker-compose.yml.
 
+See a video of the Docker method at https://www.youtube.com/watch?v=giVgmc10qv4 (2015-11-29 build f8014f5)
+
 *These scripts are not an official Oracle product, and the stack they produce is not supported (centos, hsqldb).*
 
 ### Usage - Vagrant:
