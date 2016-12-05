@@ -1,4 +1,4 @@
-#!/bin/sh -ax
+#!/bin/sh -a
 
 . $V_CONFIG
 echo system
