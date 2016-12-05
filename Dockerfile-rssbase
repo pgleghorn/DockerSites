@@ -1,0 +1,23 @@
+FROM centos:6
+MAINTAINER pgleghorn@gmail.com
+ARG ORACLE_USER
+ARG ORACLE_PASSWORD
+ARG V_SCRIPTS
+ARG V_CONFIG
+# required packages
+RUN yum -y install wget unzip augeas
+# install scripts
+RUN mkdir -p $V_SCRIPTS
+COPY scripts $V_SCRIPTS
+COPY config.sh $V_CONFIG
+# grab kits
+RUN mkdir -p /kits
+WORKDIR /kits
+RUN $V_SCRIPTS/download.sh ${ORACLE_USER} ${ORACLE_PASSWORD} "https://updates.oracle.com/Orion/Services/download/p17157502_111180_Generic.zip?aru=16606355&patch_file=p17157502_111180_Generic.zip" p17157502_111180_Generic.zip
+RUN wget --progress=dot:mega -O apache-tomcat-7.0.62.tar.gz http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.62/bin/apache-tomcat-7.0.62.tar.gz
+RUN $V_SCRIPTS/download.sh ${ORACLE_USER} ${ORACLE_PASSWORD} "http://download.oracle.com/otn-pub/java/jdk/7u79-b15/jdk-7u79-linux-x64.tar.gz" jdk-7u79-linux-x64.tar.gz
+# init system
+RUN $V_SCRIPTS/_system.sh V_RSSDIRS
+USER oracle
+WORKDIR /home/oracle
+CMD /bin/bash -l
