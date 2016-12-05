@@ -1,5 +1,5 @@
 editorial:
-  image: vsrun
+  image: wcsrun
   hostname: editorial
   ports:
     - "5001:5001"
@@ -7,7 +7,7 @@ editorial:
   links:
     - delivery
 delivery:
-  image: vsrun
+  image: wcsrun
   hostname: delivery
   ports:
     - "5002:5002"
