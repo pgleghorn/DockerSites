@@ -1,4 +1,4 @@
-FROM vsbase:latest
+FROM wcsbase:latest
 MAINTAINER pgleghorn@gmail.com
 ARG V_SCRIPTS
 ARG V_CONFIG

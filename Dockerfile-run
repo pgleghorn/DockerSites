@@ -1,4 +1,4 @@
-FROM vspatch:latest
+FROM wcspatch:latest
 MAINTAINER pgleghorn@gmail.com
 ARG V_SCRIPTS
 ARG V_CONFIG
