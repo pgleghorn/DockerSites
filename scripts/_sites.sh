@@ -57,7 +57,7 @@ sed -i '/^loadfile=/d' install.ini
 echo "loadfile=$V_SITES_INSTALLDIR/ominstallinfo/silentconfig.ini" >> install.ini
 
 # run
-( cd /tmp/Sites; wait.sh | ./csInstall.sh -silent )
+( cd /tmp/Sites; wait.sh $V_SITES_INSTALLDIR/ominstallinfo/install_log.log | ./csInstall.sh -silent )
 
 # fix esapi loading
 mkdir -p $V_UNIXUSERHOME/esapi
