@@ -1,14 +1,25 @@
-editorial:
-  image: wcsrun
-  hostname: editorial
-  ports:
-    - "5001:5001"
-  command: bash -l -c "startupDynamic.sh editorial 5001"
-  links:
-    - delivery
-delivery:
-  image: wcsrun
-  hostname: delivery
-  ports:
-    - "5002:5002"
-  command: bash -l -c "startupDynamic.sh delivery 5002"
+version: '2'
+
+services:
+  editorial:
+    image: pgleghorn/wcsrun
+    hostname: editorial
+    ports:
+      - "5001:5001"
+    command: bash -l -c "startupDynamicWcs.sh editorial 5001"
+    links:
+      - delivery
+  delivery:
+    image: pgleghorn/wcsrun
+    hostname: delivery
+    ports:
+      - "5002:5002"
+    command: bash -l -c "startupDynamicWcs.sh delivery 5002"
+    links:
+      - rss
+  rss:
+    image: pgleghorn/rssrun
+    hostname: rss
+    ports:
+      - "5003:5003"
+    command: bash -l -c "startupDynamicRss.sh rss 5003"
