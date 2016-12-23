@@ -2,12 +2,9 @@
 
 file_extensions_to_scan="properties ini wsdl xml"
 
-#if [ ! -f $V_SITES_INSTALLDIR/.renamed ]; then
-	# set desired host:port
-	touch $V_SITES_INSTALLDIR/.renamed
-	for dir in $@; do
-		findreplace.sh $dir $V_HOSTNAME $V_NEW_COMPOSE_HOSTNAME "$file_extensions_to_scan" | tee -a $V_SITES_INSTALLDIR/.renamed
-		findreplace.sh $dir $V_PORT $V_NEW_COMPOSE_PORT "$file_extensions_to_scan" | tee -a $V_SITES_INSTALLDIR/.renamed
-	done
-	# todo also systemsatellite and webroot tables
-#fi
+# set desired host:port
+for dir in $@; do
+	findreplace.sh $dir $V_HOSTNAME $V_NEW_COMPOSE_HOSTNAME "$file_extensions_to_scan" | tee -a /tmp/.renamed
+	findreplace.sh $dir $V_PORT $V_NEW_COMPOSE_PORT "$file_extensions_to_scan" | tee -a /tmp/.renamed
+done
+# todo also systemsatellite and webroot tables
