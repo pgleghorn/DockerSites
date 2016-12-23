@@ -7,10 +7,20 @@ if [ -z $ORACLE_USER ] &&  [ -z $ORACLE_PASSWORD ]; then
 	exit
 fi
 downloadargs=" --build-arg ORACLE_USER=$ORACLE_USER --build-arg ORACLE_PASSWORD=$ORACLE_PASSWORD"
-vargs=" --build-arg V_SCRIPTS=$V_SCRIPTS --build-arg V_CONFIG=$V_CONFIG "
-docker build $vargs $downloadargs -t wcsbase $@ -f Dockerfile-wcsbase .
-docker build $vargs -t wcsinstall $@ -f Dockerfile-wcsinstall .
-docker build $vargs -t wcspatch $@ -f Dockerfile-wcspatch .
-docker build $vargs -t wcsrun $@ -f Dockerfile-wcsrun .
 
-docker build $vargs $downloadargs -t rssbase $@ -f Dockerfile-rssbase .
+vargs=" --build-arg V_SCRIPTS=$V_SCRIPTS --build-arg V_CONFIG=$V_CONFIG "
+#vargs=" --build-arg V_SCRIPTS=/vagrant/scripts --build-arg V_CONFIG=/vagrant/config.sh "
+
+# TODO /kits data container
+
+# wcs
+docker build $vargs $downloadargs -t pgleghorn/wcsbase $@ -f Dockerfile-wcsbase .
+docker build $vargs -t pgleghorn/wcsinstall $@ -f Dockerfile-wcsinstall .
+docker build $vargs -t pgleghorn/wcspatch $@ -f Dockerfile-wcspatch .
+docker build $vargs -t pgleghorn/wcsrun $@ -f Dockerfile-wcsrun .
+
+# rss
+docker build $vargs $downloadargs -t pgleghorn/rssbase $@ -f Dockerfile-rssbase .
+docker build $vargs -t pgleghorn/rssinstall $@ -f Dockerfile-rssinstall .
+docker build $vargs -t pgleghorn/rsspatch $@ -f Dockerfile-rsspatch .
+docker build $vargs -t pgleghorn/rssrun $@ -f Dockerfile-rssrun .
