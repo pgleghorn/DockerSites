@@ -1,15 +1,17 @@
 FROM centos:6
 MAINTAINER pgleghorn@gmail.com
-ARG ORACLE_USER
-ARG ORACLE_PASSWORD
+# refresh the scripts and config
 ARG V_SCRIPTS
 ARG V_CONFIG
+ENV V_SCRIPTS=$V_SCRIPTS V_CONFIG=$V_CONFIG
+RUN mkdir -p $V_SCRIPTS
+COPY config.sh $V_CONFIG
+COPY scripts $V_SCRIPTS
+#
+ARG ORACLE_USER
+ARG ORACLE_PASSWORD
 # required packages
 RUN yum -y install wget unzip augeas
-# install scripts
-RUN mkdir -p $V_SCRIPTS
-COPY scripts $V_SCRIPTS
-COPY config.sh $V_CONFIG
 # grab kits
 RUN mkdir -p /kits
 WORKDIR /kits
