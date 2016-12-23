@@ -1,6 +1,0 @@
-rss:
-  image: pgleghorn/rssrun
-  hostname: rss
-  ports:
-    - "5003:5003"
-  command: bash -l -c "startupDynamicRss.sh rss 5003"
